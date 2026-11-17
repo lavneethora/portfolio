@@ -54,8 +54,11 @@ export function CeremoniDiagram() {
       <path {...ink} d="M380 90c40 0 36 110 72 110M380 200h72M380 310c40 0 36-110 72-110" />
       <circle {...ink} cx="476" cy="200" r="22" />
       <path {...ink} d="M466 200l7 8 14-17" />
+      <text {...label} x="476" y="160" textAnchor="middle">
+        most common
+      </text>
       <text {...label} x="476" y="252" textAnchor="middle">
-        most common wins
+        wins
       </text>
 
       {/* Out to speech */}
