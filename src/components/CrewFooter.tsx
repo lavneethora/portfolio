@@ -527,7 +527,7 @@ export default function CrewFooter({
   fontFamily = DEFAULT_FONT,
   tracking = -0.02,
   interactive = true,
-  height = "clamp(240px, 40vw, 520px)",
+  height = "clamp(170px, 26vw, 400px)",
   className,
 }: CrewFooterProps) {
   const uid = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -1128,7 +1128,7 @@ const CSS =
   ".dcf svg{max-width:none;overflow:visible}" +
   ".dcf :focus-visible{outline:2px dashed var(--dcf-ink);outline-offset:4px;border-radius:6px}" +
   ".dcf-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}" +
-  ".dcf-world{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(28px,5vw,64px) clamp(16px,4vw,56px) clamp(18px,3vw,36px);max-width:1360px;width:100%;margin:0 auto}" +
+  ".dcf-world{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(20px,2.6vw,40px) clamp(16px,4vw,56px) clamp(18px,3vw,36px);max-width:1360px;width:100%;margin:0 auto}" +
   ".dcf-stage{position:relative;z-index:1}" +
   ".dcf-svg{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}" +
   ".dcf-svg text{fill:var(--dcf-ink)}" +
