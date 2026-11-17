@@ -4,8 +4,8 @@
  * Ink on paper.
  *
  * The page is an engineering pad: buff paper, a green grid, blue-black ink,
- * and one red pen. Red is reserved for measured numbers, hand-drawn marks
- * and link hover. If something else wants to be red, it should not be.
+ * and one red pen. Red is the marker block behind the first name, measured
+ * numbers, hand-drawn marks and link hover. Nothing else should be red.
  *
  * The one other color is GitHub's merged purple, and it only ever marks a
  * merged pull request. It is a status borrowed from GitHub, not an accent.
@@ -337,7 +337,17 @@
   white-space: nowrap;
 }
 
+/*
+ * The first name sits in a marker block: red field, paper-coloured letters.
+ * The block bleeds out by exactly its own padding, so the letters stay
+ * aligned with HORA underneath rather than being pushed in by it.
+ */
 .name .first {
+  width: fit-content;
+  padding: 0.14em 0.07em 0.1em;
+  margin-left: -0.09em;
+  background: var(--red);
+  color: var(--paper);
   font-stretch: 62%;
   font-size: 31.1cqi;
   line-height: 0.8;
