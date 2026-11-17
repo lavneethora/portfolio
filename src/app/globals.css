@@ -267,7 +267,11 @@
   }
 }
 
-/* Graph paper, fading out toward the fold so the page below is plain. */
+/*
+ * Graph paper, fading out toward the fold so the page below is plain. Its
+ * origin is the orbit's centre (set by Orbit.tsx), so the figure eight sits
+ * square on the grid at every viewport size.
+ */
 .hero::before {
   content: "";
   position: absolute;
@@ -282,7 +286,7 @@
     120px 120px,
     24px 24px,
     24px 24px;
-  background-position: -1px -1px;
+  background-position: var(--grid-x, -1px) var(--grid-y, -1px);
   mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
   pointer-events: none;
 }
