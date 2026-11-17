@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CeremoniDiagram } from "@/components/CeremoniDiagram";
 import { Mark } from "@/components/Mark";
 import { Orbit } from "@/components/Orbit";
+import { PrState } from "@/components/PrState";
 import { Taped } from "@/components/Taped";
 import { askMeAbout, awards, bio, intro } from "@/content/about";
 import { roles } from "@/content/experience";
@@ -106,9 +107,10 @@ export default function Home() {
                       <a href={`https://github.com/${group.repo}`}>{group.name}</a>
                     </h3>
                     <span className="aside">
-                      {group.merged > 0 ? `${group.merged} merged` : null}
-                      {group.merged > 0 && group.open > 0 ? ", " : null}
-                      {group.open > 0 ? `${group.open} open` : null}
+                      {group.merged > 0 ? (
+                        <PrState state="merged">{group.merged} merged</PrState>
+                      ) : null}
+                      {group.open > 0 ? <PrState state="open">{group.open} open</PrState> : null}
                     </span>
                   </div>
                   <p className="quiet">{group.what}</p>
@@ -118,7 +120,7 @@ export default function Home() {
                     <ol>
                       {group.prs.map((pr) => (
                         <li key={pr.url}>
-                          <span className="state">{pr.state}</span>
+                          <PrState state={pr.state}>{pr.state}</PrState>
                           <a href={pr.url}>{pr.title}</a>
                         </li>
                       ))}
@@ -130,14 +132,16 @@ export default function Home() {
                 <li>
                   <div className="row-head">
                     <h3>Also under review</h3>
-                    <span className="aside">{otherOpen.length} open</span>
+                    <span className="aside">
+                      <PrState state="open">{otherOpen.length} open</PrState>
+                    </span>
                   </div>
                   <details className="prs">
                     <summary>Show the pull requests</summary>
                     <ol>
                       {otherOpen.map((pr) => (
                         <li key={pr.url}>
-                          <span className="state">{pr.state}</span>
+                          <PrState state={pr.state}>{pr.state}</PrState>
                           <a href={pr.url}>
                             {pr.repo.split("/")[1]}: {pr.title}
                           </a>
