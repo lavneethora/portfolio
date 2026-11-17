@@ -21,6 +21,9 @@ const FULL_THROW_PX = 170;
 /** After an ejection the hero would sit empty, so it resets itself. */
 const RESET_AFTER_EJECT_MS = 12_000;
 
+/** Same if every body has wandered off the page. */
+const RESET_AFTER_EMPTY_MS = 4_000;
+
 const PERIOD_LABEL = `${FIGURE_EIGHT_PERIOD_DAYS.toFixed(1)} days`;
 
 interface Trail {
@@ -82,6 +85,7 @@ export function Orbit({ children }: { children: ReactNode }) {
     let last = 0;
     let lastReadout = 0;
     let ejectedAt = 0;
+    let emptySince = 0;
 
     const sx = (x: number) => view.cx + x * view.scale;
     const sy = (y: number) => view.cy - y * view.scale;
@@ -219,10 +223,20 @@ export function Orbit({ children }: { children: ReactNode }) {
       if (resetRef.current) resetRef.current.hidden = s.kind === "stable";
     }
 
+    function anyBodyOnPage(): boolean {
+      for (let i = 0; i < sim.state.n; i++) {
+        const x = sx(sim.state.pos[i * 3]);
+        const y = sy(sim.state.pos[i * 3 + 1]);
+        if (x > 0 && x < view.w && y > 0 && y < view.h) return true;
+      }
+      return false;
+    }
+
     function reset() {
       sim.reset();
       clearTrails();
       ejectedAt = 0;
+      emptySince = 0;
       writeReadout();
       draw();
     }
@@ -247,6 +261,12 @@ export function Orbit({ children }: { children: ReactNode }) {
       if (sim.status.kind === "ejected") {
         if (!ejectedAt) ejectedAt = now;
         else if (now - ejectedAt > RESET_AFTER_EJECT_MS) reset();
+      }
+      if (sim.status.kind !== "stable" && !anyBodyOnPage()) {
+        if (!emptySince) emptySince = now;
+        else if (now - emptySince > RESET_AFTER_EMPTY_MS) reset();
+      } else {
+        emptySince = 0;
       }
     }
 
@@ -303,7 +323,11 @@ export function Orbit({ children }: { children: ReactNode }) {
       const body = bodyNear(p.x, p.y, e.pointerType === "mouse" ? GRAB_MOUSE : GRAB_TOUCH);
       if (body < 0) return;
       e.preventDefault();
-      section!.setPointerCapture(e.pointerId);
+      try {
+        section!.setPointerCapture(e.pointerId);
+      } catch {
+        // Capture is a nicety. Without it the drag still works inside the hero.
+      }
       drag = { body, x: p.x, y: p.y };
       section!.style.cursor = "grabbing";
     }
@@ -338,6 +362,12 @@ export function Orbit({ children }: { children: ReactNode }) {
       section!.style.cursor = "";
       if (section!.hasPointerCapture(e.pointerId)) section!.releasePointerCapture(e.pointerId);
       writeReadout();
+    }
+
+    /** The browser took the gesture back. Let go without throwing. */
+    function onPointerCancel() {
+      drag = null;
+      section!.style.cursor = "";
     }
 
     /** A finger that lands on a star is throwing, not scrolling. */
@@ -402,7 +432,7 @@ export function Orbit({ children }: { children: ReactNode }) {
     section.addEventListener("pointerdown", onPointerDown);
     section.addEventListener("pointermove", onPointerMove);
     section.addEventListener("pointerup", onPointerUp);
-    section.addEventListener("pointercancel", onPointerUp);
+    section.addEventListener("pointercancel", onPointerCancel);
     section.addEventListener("touchstart", onTouchStart, { passive: false });
     throwBtn?.addEventListener("click", throwOne);
     resetBtn?.addEventListener("click", reset);
@@ -425,7 +455,7 @@ export function Orbit({ children }: { children: ReactNode }) {
       section.removeEventListener("pointerdown", onPointerDown);
       section.removeEventListener("pointermove", onPointerMove);
       section.removeEventListener("pointerup", onPointerUp);
-      section.removeEventListener("pointercancel", onPointerUp);
+      section.removeEventListener("pointercancel", onPointerCancel);
       section.removeEventListener("touchstart", onTouchStart);
       throwBtn?.removeEventListener("click", throwOne);
       resetBtn?.removeEventListener("click", reset);
