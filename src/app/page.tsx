@@ -6,7 +6,7 @@ import { PrState } from "@/components/PrState";
 import { Taped } from "@/components/Taped";
 import { askMeAbout, awards, bio, intro } from "@/content/about";
 import { roles } from "@/content/experience";
-import { more } from "@/content/more";
+import { githubShot, more, moreIntro } from "@/content/more";
 import { fetchedAt, otherOpen, repoGroups, totalMerged } from "@/content/opensource";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/lib/site";
@@ -85,6 +85,37 @@ export default function Home() {
             {projects.map((project, i) => (
               <ProjectEntry key={project.slug} project={project} first={i === 0} />
             ))}
+
+            <article className="project" id="more">
+              <div>
+                <h3 className="display">More work</h3>
+                <p className="line">{moreIntro}</p>
+                <ul className="more-list">
+                  {more.map((item) => (
+                    <li key={item.name}>
+                      <span className="name-cell">
+                        {item.href ? <a href={item.href}>{item.name}</a> : item.name}
+                        {item.note ? <span className="note">{item.note}</span> : null}
+                      </span>
+                      <p>{item.line}</p>
+                    </li>
+                  ))}
+                </ul>
+                <p className="links">
+                  <a href={site.github}>Everything on GitHub</a>
+                </p>
+              </div>
+
+              <Taped>
+                <Image
+                  src={githubShot.src}
+                  alt={githubShot.alt}
+                  width={githubShot.width}
+                  height={githubShot.height}
+                  sizes="(min-width: 1100px) 44vw, 92vw"
+                />
+              </Taped>
+            </article>
           </div>
         </section>
 
@@ -171,25 +202,6 @@ export default function Home() {
                   </div>
                   <p className="quiet">{role.title}</p>
                   <p>{role.did}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        <section className="section" id="more" aria-labelledby="more-title">
-          <h2 className="section-title" id="more-title">
-            More work
-          </h2>
-          <div className="section-body">
-            <ul className="more-list">
-              {more.map((item) => (
-                <li key={item.name}>
-                  <span className="name-cell">
-                    {item.href ? <a href={item.href}>{item.name}</a> : item.name}
-                    {item.note ? <span className="note">{item.note}</span> : null}
-                  </span>
-                  <p>{item.line}</p>
                 </li>
               ))}
             </ul>
