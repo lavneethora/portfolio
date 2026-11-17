@@ -1,4 +1,4 @@
-/** Hero intro, bio, awards, and the off-topic list. */
+/** Hero intro, bio and awards. */
 
 export const intro =
   "I'm a computer science student at Texas Tech and I like building things people end up using. My Chrome extension has 800+ users at Texas Tech, Nudge texts people before a free trial charges them, and Harvey and Databricks have merged my pull requests.";
@@ -23,24 +23,5 @@ export const awards: Award[] = [
   },
   { name: "Gulf Coast Consortia Fellow" },
   { name: "President's Honor List", detail: "4 times, with a 3.94 GPA." },
-  { name: "Hackathon wins", detail: "HackCU12 (AMD Ryzen AI track) and HackWesTX VII (MLH track)." },
-];
-
-/**
- * DRAFT. Written from the little the site's author knew. Lavneet should
- * rewrite these in his own words or replace them.
- */
-export const askMeAbout: { topic: string; line: string }[] = [
-  {
-    topic: "3 Body Problem",
-    line: "The show is the reason the gravity simulator exists.",
-  },
-  {
-    topic: "Color grading photos",
-    line: "I shoot and grade my own, which is how strip-ai-tag happened.",
-  },
-  {
-    topic: "Football",
-    line: "Mostly kicking, and what a camera can tell you about a kick.",
-  },
+  { name: "Hackathon Wins", detail: "HackCU12 (AMD Ryzen AI track) and HackWesTX VII (MLH track)." },
 ];
