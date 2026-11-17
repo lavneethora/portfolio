@@ -227,10 +227,9 @@
  * ------------------------------------------------------------------ */
 
 .hero {
-  /* Where the orbit sits and how big it is. Orbit.tsx reads these. */
-  --ox: 50%;
-  --oy: 27%;
-  --os: 0.37;
+  /* Room the orbit gets above the name on a phone. Used twice below. */
+  --stage-top: 4.5rem;
+  --stage-h: clamp(11rem, 34svh, 20rem);
 
   position: relative;
   min-height: 100svh;
@@ -238,11 +237,25 @@
   touch-action: pan-y;
 }
 
+/*
+ * The box the orbit is drawn in. Orbit.tsx centres the figure eight in it
+ * and scales it to fit, so moving or resizing this box is all it takes to
+ * move the orbit.
+ */
+.orbit-stage {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: var(--stage-top);
+  height: var(--stage-h);
+  pointer-events: none;
+}
+
 @media (min-width: 900px) {
-  .hero {
-    --ox: 67%;
-    --oy: 41%;
-    --os: 0.17;
+  .orbit-stage {
+    left: 45%;
+    top: 13svh;
+    height: clamp(14rem, 52svh, 34rem);
   }
 }
 
@@ -280,7 +293,7 @@
   gap: 2rem;
   align-content: end;
   min-height: 100svh;
-  padding: 47svh var(--gutter) 2.25rem;
+  padding: calc(var(--stage-top) + var(--stage-h) + 4.75rem) var(--gutter) 2.25rem;
   pointer-events: none;
 }
 
@@ -387,15 +400,16 @@
   display: none;
 }
 
-/* The red-pen note next to the orbit. Goes away once a star is thrown. */
+/* The red-pen note under the orbit. Goes away once a star is thrown. */
 .orbit-hint {
   position: absolute;
-  left: calc(var(--ox) + 1rem);
-  top: calc(var(--oy) + 14svh);
-  z-index: 1;
+  left: 50%;
+  /* --orbit-drop is how far the lower lobe hangs below centre, set by Orbit.tsx. */
+  top: calc(50% + var(--orbit-drop, 4rem) + 1.1rem);
   display: flex;
   align-items: flex-start;
   gap: 0.4rem;
+  width: max-content;
   margin: 0;
   color: var(--red);
   font-size: 0.95rem;
@@ -403,7 +417,7 @@
   font-weight: 500;
   line-height: 1.2;
   rotate: -3deg;
-  pointer-events: none;
+  translate: -20% 0;
   transition: opacity 400ms;
 }
 
@@ -416,14 +430,6 @@
 
 .hero[data-touched] .orbit-hint {
   opacity: 0;
-}
-
-@media (max-width: 899px) {
-  .orbit-hint {
-    left: 50%;
-    top: calc(var(--oy) + 9.5svh);
-    translate: -30% 0;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
