@@ -6,6 +6,9 @@
  * The page is an engineering pad: buff paper, a green grid, blue-black ink,
  * and one red pen. Red is reserved for measured numbers, hand-drawn marks
  * and link hover. If something else wants to be red, it should not be.
+ *
+ * The one other color is GitHub's merged purple, and it only ever marks a
+ * merged pull request. It is a status borrowed from GitHub, not an accent.
  */
 
 :root {
@@ -18,6 +21,7 @@
   --hairline: rgb(22 25 31 / 0.16);
   --red: #c41526;
   --tape: rgb(224 211 160 / 0.88);
+  --merged: #6639ba;
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   color-scheme: light;
 }
@@ -34,6 +38,7 @@
     --hairline: rgb(231 228 214 / 0.18);
     --red: #ff6166;
     --tape: rgb(214 200 150 / 0.55);
+    --merged: #b89cf7;
     color-scheme: dark;
   }
 }
@@ -48,6 +53,7 @@
   --hairline: rgb(231 228 214 / 0.18);
   --red: #ff6166;
   --tape: rgb(214 200 150 / 0.55);
+  --merged: #b89cf7;
   color-scheme: dark;
 }
 
@@ -841,12 +847,33 @@
 
 .prs li {
   display: grid;
-  grid-template-columns: 4.2rem minmax(0, 1fr);
+  grid-template-columns: 5.4rem minmax(0, 1fr);
   gap: 0.75rem;
 }
 
-.prs .state {
+/* Icon and word for a pull request's state, as GitHub shows it. */
+.pr-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
   color: var(--graphite);
+  white-space: nowrap;
+}
+
+.pr-state svg {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  fill: currentColor;
+}
+
+.pr-merged {
+  color: var(--merged);
+  font-weight: 600;
+}
+
+.row-head .aside .pr-state + .pr-state {
+  margin-left: 0.9rem;
 }
 
 .more-list {
