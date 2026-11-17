@@ -24,8 +24,8 @@ export function ThemeToggle() {
 
   return (
     <button type="button" className="theme-toggle" onClick={toggle}>
-      <span className="when-light">Lights off</span>
-      <span className="when-dark">Lights on</span>
+      <span className="when-light">Lights Off</span>
+      <span className="when-dark">Lights On</span>
     </button>
   );
 }
