@@ -1,4 +1,15 @@
-/** Smaller and in-progress work. One line each. */
+/** Smaller and in-progress work. One line each. Shown at the end of Work. */
+
+/** The sentence under the "More work" heading. */
+export const moreIntro = "Smaller projects and hackathon builds. Two are still in progress.";
+
+/** The picture taped next to the list: pinned repos and the contribution graph. */
+export const githubShot = {
+  src: "/work/github.jpg",
+  alt: "My GitHub profile: four pinned repositories above a contribution graph showing 2,280 contributions in the last year.",
+  width: 1880,
+  height: 1170,
+};
 
 export interface MoreItem {
   name: string;
