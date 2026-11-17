@@ -176,6 +176,18 @@
   text-decoration: none;
 }
 
+/* On a phone the nav gets the whole row. The same fact is in About. */
+@media (max-width: 699px) {
+  .site-header > p {
+    display: none;
+  }
+
+  .site-header nav {
+    justify-content: flex-start;
+    gap: 0.25rem 1.1rem;
+  }
+}
+
 .site-header a:hover {
   text-decoration: underline;
 }
@@ -268,7 +280,7 @@
   gap: 2rem;
   align-content: end;
   min-height: 100svh;
-  padding: 50svh var(--gutter) 2.25rem;
+  padding: 47svh var(--gutter) 2.25rem;
   pointer-events: none;
 }
 
@@ -409,8 +421,8 @@
 @media (max-width: 899px) {
   .orbit-hint {
     left: 50%;
-    top: calc(var(--oy) + 17svh);
-    translate: -50% 0;
+    top: calc(var(--oy) + 9.5svh);
+    translate: -30% 0;
   }
 }
 
