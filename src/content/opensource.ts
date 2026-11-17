@@ -40,13 +40,13 @@ const featured: RepoNote[] = [
   {
     repo: "omnigent-ai/omnigent",
     name: "Omnigent",
-    what: "Databricks' open-source agent harness",
+    what: "Databricks' Open-Source Agent Harness",
     did: "Patched a credential leak where repository URLs with embedded tokens were saved into session labels and pod specs.",
   },
   {
     repo: "rajfirke/provena",
     name: "Provena",
-    what: "Tamper-evident audit trails for AI agents",
+    what: "Tamper-Evident Audit Trails for AI Agents",
     did: "Mostly storage fixes, like pinning pooled Postgres connections to UTC so chain verification survives a non-UTC time zone.",
   },
 ];
