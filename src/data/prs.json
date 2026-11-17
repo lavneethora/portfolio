@@ -1,0 +1,285 @@
+{
+  "fetchedAt": "2026-11-17",
+  "prs": [
+    {
+      "repo": "rajfirke/provena",
+      "number": 267,
+      "title": "fix(aggregator): apply the run filter before the per-trail limit",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/267",
+      "createdAt": "2026-11-12"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 266,
+      "title": "fix(trail): resync the buffered tip from the stored chain hash (closes #242)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/266",
+      "createdAt": "2026-11-12"
+    },
+    {
+      "repo": "sgl-project/sglang",
+      "number": 46407,
+      "title": "[Fix] environ: restore the env var when an override block raises",
+      "state": "open",
+      "url": "https://github.com/sgl-project/sglang/pull/46407",
+      "createdAt": "2026-10-25"
+    },
+    {
+      "repo": "sgl-project/sglang",
+      "number": 46389,
+      "title": "[Fix] function_call: stop dropping text before a partial tool-call marker",
+      "state": "open",
+      "url": "https://github.com/sgl-project/sglang/pull/46389",
+      "createdAt": "2026-10-25"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 206,
+      "title": "fix(tasks): ground the aggregate-exposure criteria in the matter file",
+      "state": "open",
+      "url": "https://github.com/harveyai/harvey-labs/pull/206",
+      "createdAt": "2026-10-25"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 205,
+      "title": "docs: point the install command at the current release",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/205",
+      "createdAt": "2026-10-25"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 11314,
+      "title": "fix(acp): forward XAI_API_KEY to the builtin Grok CLI",
+      "state": "merged",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/11314",
+      "createdAt": "2026-10-22"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 11306,
+      "title": "fix(cli): keep a successful login from exiting 1 when the config home is unreadable",
+      "state": "open",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/11306",
+      "createdAt": "2026-10-22"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 11231,
+      "title": "feat(claude-sdk): opt-in Claude Code session persistence",
+      "state": "open",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/11231",
+      "createdAt": "2026-10-22"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 11229,
+      "title": "fix(runtime): stop telling a parent that a stopped sub-agent is continuing",
+      "state": "open",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/11229",
+      "createdAt": "2026-10-22"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 237,
+      "title": "fix(storage-pg): report the chain hashes that tip repair actually stored (closes #231)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/237",
+      "createdAt": "2026-10-20"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 236,
+      "title": "fix(storage-pg): pin pooled connections to UTC so verify_chain survives a non-UTC TimeZone (closes #230)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/236",
+      "createdAt": "2026-10-20"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 190,
+      "title": "[models] Correct GPT-5.6 Sol pricing to the current 4.00/20.00",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/190",
+      "createdAt": "2026-10-08"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 188,
+      "title": "[models] Count Gemini thinking tokens as output tokens",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/188",
+      "createdAt": "2026-10-07"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 9294,
+      "title": "feat(client): expose lightweight session snapshot options in the Python client",
+      "state": "open",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/9294",
+      "createdAt": "2026-10-06"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 9224,
+      "title": "docs(scheduled): describe scheduled_at as the fire worker's pick-up time",
+      "state": "merged",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/9224",
+      "createdAt": "2026-10-06"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 187,
+      "title": "[models] Register four models missing from MODEL_INFO",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/187",
+      "createdAt": "2026-10-06"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 183,
+      "title": "[models] Send Gemini 3.x the default temperature of 1.0",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/183",
+      "createdAt": "2026-10-06"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 180,
+      "title": "[models] Register claude-opus-4-5 and claude-sonnet-4-5 pricing",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/180",
+      "createdAt": "2026-10-06"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 178,
+      "title": "[grading] Stop grading unreadable deliverables, record them as errors",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/178",
+      "createdAt": "2026-10-06"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 7856,
+      "title": "fix(web): refuse a repository URL that embeds credentials",
+      "state": "merged",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/7856",
+      "createdAt": "2026-09-20"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 7852,
+      "title": "fix(sessions): match the closed-title marker against the row's own id",
+      "state": "open",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/7852",
+      "createdAt": "2026-09-19"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 7729,
+      "title": "fix(web): accept .tsv attachments and pin the allowlists in both directions",
+      "state": "merged",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/7729",
+      "createdAt": "2026-09-18"
+    },
+    {
+      "repo": "SWE-bench/SWE-bench",
+      "number": 656,
+      "title": "Flag task Dockerfiles that ship a broken .bashrc (#638)",
+      "state": "open",
+      "url": "https://github.com/SWE-bench/SWE-bench/pull/656",
+      "createdAt": "2026-09-09"
+    },
+    {
+      "repo": "SWE-agent/SWE-ReX",
+      "number": 301,
+      "title": "Fix: DockerDeployment.start() hangs on startup timeout instead of reporting it",
+      "state": "open",
+      "url": "https://github.com/SWE-agent/SWE-ReX/pull/301",
+      "createdAt": "2026-09-04"
+    },
+    {
+      "repo": "omnigent-ai/omnigent",
+      "number": 6339,
+      "title": "feat: accept archives, Office documents and SQLite files for Claude Code and Codex",
+      "state": "merged",
+      "url": "https://github.com/omnigent-ai/omnigent/pull/6339",
+      "createdAt": "2026-09-03"
+    },
+    {
+      "repo": "SWE-agent/mini-swe-agent",
+      "number": 955,
+      "title": "fix(agents): don't substitute emoji shortcodes in printed message content",
+      "state": "open",
+      "url": "https://github.com/SWE-agent/mini-swe-agent/pull/955",
+      "createdAt": "2026-09-03"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 155,
+      "title": "fix(tasks): make C-045 satisfiable in review-data-room-red-flag-review",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/155",
+      "createdAt": "2026-09-03"
+    },
+    {
+      "repo": "harveyai/harvey-labs",
+      "number": 154,
+      "title": "[models] Fix registry drift for mistral-medium-3.5 and claude-sonnet-4-7",
+      "state": "merged",
+      "url": "https://github.com/harveyai/harvey-labs/pull/154",
+      "createdAt": "2026-09-03"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 162,
+      "title": "fix(trail): extract provenance per document for list results (closes #149)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/162",
+      "createdAt": "2026-09-01"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 140,
+      "title": "fix(deps): include postgres, mcp and pdf in the all extra (closes #71)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/140",
+      "createdAt": "2026-08-26"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 136,
+      "title": "feat(cli): add --source filter to summary command (closes #75)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/136",
+      "createdAt": "2026-08-24"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 135,
+      "title": "feat(cli): add --provenance-status and --freshness-status to audit (c…",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/135",
+      "createdAt": "2026-08-24"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 132,
+      "title": "fix(trail): compute and record config_hash on every entry (closes #103)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/132",
+      "createdAt": "2026-08-23"
+    },
+    {
+      "repo": "rajfirke/provena",
+      "number": 131,
+      "title": "fix(cli): validate migrate --batch-size is >= 1 (closes #106)",
+      "state": "merged",
+      "url": "https://github.com/rajfirke/provena/pull/131",
+      "createdAt": "2026-08-22"
+    }
+  ]
+}
