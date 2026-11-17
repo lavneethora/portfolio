@@ -63,6 +63,22 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: "ceremoni",
+    name: "Ceremoni",
+    line: "Gets every graduate's name pronounced right at the ceremony.",
+    about:
+      "Students record their own name once. Ceremoni pulls the phonetics out of the recording with GPT-Audio and voices it with Azure TTS, so the name read at the ceremony is the one the student said.",
+    hard:
+      "One pass through a model got names wrong too often. Now each recording is read 3 times across 2 audio models and the most common answer wins. I reshaped the MVP around what Texas Tech's Honors College needs for its Fall 2026 medallion ceremony.",
+    facts: [
+      { value: "3 readings", label: "of each recording, across 2 audio models" },
+      { value: "Fall 2026", label: "Honors College medallion ceremony" },
+    ],
+    stack: "Python, FastAPI, PostgreSQL, GPT-Audio, Azure TTS, Docker",
+    links: [{ label: "Code", href: "https://github.com/lavneethora/ceremoni" }],
+    image: "diagram",
+  },
+  {
     slug: "raiderrating",
     name: "RaiderRating",
     line: "Professor ratings and grade distributions inside Texas Tech's schedule builder.",
@@ -141,21 +157,5 @@ export const projects: Project[] = [
       width: 1180,
       height: 718,
     },
-  },
-  {
-    slug: "ceremoni",
-    name: "Ceremoni",
-    line: "Gets every graduate's name pronounced right at the ceremony.",
-    about:
-      "Students record their own name once. Ceremoni pulls the phonetics out of the recording with GPT-Audio and voices it with Azure TTS, so the name read at the ceremony is the one the student said.",
-    hard:
-      "One pass through a model got names wrong too often. Now each recording is read 3 times across 2 audio models and the most common answer wins. I reshaped the MVP around what Texas Tech's Honors College needs for its Fall 2026 medallion ceremony.",
-    facts: [
-      { value: "3 readings", label: "of each recording, across 2 audio models" },
-      { value: "Fall 2026", label: "Honors College medallion ceremony" },
-    ],
-    stack: "Python, FastAPI, PostgreSQL, GPT-Audio, Azure TTS, Docker",
-    links: [{ label: "Code", href: "https://github.com/lavneethora/ceremoni" }],
-    image: "diagram",
   },
 ];
