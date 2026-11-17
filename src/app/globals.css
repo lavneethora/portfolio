@@ -776,7 +776,7 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Lists: open source, experience, more work
+ * Lists: open source and experience
  * ------------------------------------------------------------------ */
 
 .rows {
@@ -874,75 +874,6 @@
 
 .row-head .aside .pr-state + .pr-state {
   margin-left: 0.9rem;
-}
-
-.more-list {
-  display: grid;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.more-list li {
-  display: grid;
-  gap: 0.2rem 2rem;
-  padding: 1.1rem 0;
-  border-top: 1px solid var(--hairline);
-}
-
-.more-list li:first-child {
-  padding-top: 0;
-  border-top: 0;
-}
-
-@media (min-width: 760px) {
-  .more-list li {
-    grid-template-columns: 15rem minmax(0, 1fr);
-    align-items: baseline;
-  }
-}
-
-/* Inside a project entry the column is narrow, so name sits above its line. */
-.project .more-list {
-  max-width: 33rem;
-  margin-top: 1.75rem;
-}
-
-.project .more-list li {
-  grid-template-columns: minmax(0, 1fr);
-  padding: 0.95rem 0;
-}
-
-.project .more-list + .links {
-  margin-top: 1.5rem;
-}
-
-/* The list is much taller than its picture, so the picture rides along. */
-@media (min-width: 1100px) {
-  #more .shot {
-    position: sticky;
-    top: 5rem;
-  }
-}
-
-.more-list .name-cell {
-  font-size: 1.2rem;
-  font-weight: 700;
-  font-stretch: 78%;
-}
-
-.more-list .note {
-  margin-left: 0.5rem;
-  color: var(--graphite);
-  font-size: 0.85rem;
-  font-weight: 400;
-  font-stretch: 100%;
-}
-
-.more-list p {
-  max-width: 40rem;
-  margin: 0;
 }
 
 /* ------------------------------------------------------------------ *
