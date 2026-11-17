@@ -342,14 +342,14 @@
 }
 
 /*
- * The first name sits in a marker block: red field, paper-coloured letters.
- * The block bleeds out by exactly its own padding, so the letters stay
- * aligned with HORA underneath rather than being pushed in by it.
+ * The first name is highlighted, the way dragging a cursor over it would do
+ * it. That means an inline background rather than a padded block: an inline
+ * box is as tall as the font's own ascent and descent, so the red runs past
+ * the letters and over the top of HORA, and it is exactly as wide as the
+ * text with no padding to push the letters out of line.
  */
 .name .first {
-  width: fit-content;
-  padding: 0.14em 0.07em 0.1em;
-  margin-left: -0.09em;
+  display: inline;
   background: var(--red);
   color: var(--paper);
   font-stretch: 62%;
