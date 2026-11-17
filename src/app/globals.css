@@ -1,0 +1,852 @@
+@import "tailwindcss";
+
+/*
+ * Ink on paper.
+ *
+ * The page is an engineering pad: buff paper, a green grid, blue-black ink,
+ * and one red pen. Red is reserved for measured numbers, hand-drawn marks
+ * and link hover. If something else wants to be red, it should not be.
+ */
+
+:root {
+  --paper: #ecebdc;
+  --frame: #f7f6ec;
+  --ink: #16191f;
+  --graphite: #56595c;
+  --grid: rgb(52 110 86 / 0.14);
+  --grid-major: rgb(52 110 86 / 0.24);
+  --hairline: rgb(22 25 31 / 0.16);
+  --red: #c41526;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  color-scheme: light;
+}
+
+/* Lights off: same page, dark paper, chalk ink. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #101316;
+    --frame: #181c20;
+    --ink: #e7e4d6;
+    --graphite: #9c9e99;
+    --grid: rgb(150 214 190 / 0.07);
+    --grid-major: rgb(150 214 190 / 0.13);
+    --hairline: rgb(231 228 214 / 0.18);
+    --red: #ff6166;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #101316;
+  --frame: #181c20;
+  --ink: #e7e4d6;
+  --graphite: #9c9e99;
+  --grid: rgb(150 214 190 / 0.07);
+  --grid-major: rgb(150 214 190 / 0.13);
+  --hairline: rgb(231 228 214 / 0.18);
+  --red: #ff6166;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-frame: var(--frame);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-red: var(--red);
+  --color-hairline: var(--hairline);
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    background: var(--paper);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    font-stretch: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--red);
+    color: var(--paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: var(--hairline);
+    transition: color 120ms, text-decoration-color 120ms;
+  }
+
+  a:hover {
+    color: var(--red);
+    text-decoration-color: currentColor;
+  }
+
+  [id] {
+    scroll-margin-top: 2rem;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 50;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.5rem 0.9rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Type roles
+ * ------------------------------------------------------------------ */
+
+/* Condensed and heavy: project names and the big name. */
+.display {
+  font-stretch: 68%;
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.012em;
+}
+
+/* Instrument text: the orbit readout and nothing decorative. */
+.readout {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  font-variant-numeric: tabular-nums;
+}
+
+.quiet {
+  color: var(--graphite);
+}
+
+/* ------------------------------------------------------------------ *
+ * Header
+ * ------------------------------------------------------------------ */
+
+.site-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem var(--gutter);
+  font-size: 0.95rem;
+}
+
+.site-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem 1.4rem;
+}
+
+.site-header a {
+  text-decoration: none;
+}
+
+.site-header a:hover {
+  text-decoration: underline;
+}
+
+.theme-toggle {
+  cursor: pointer;
+  color: var(--graphite);
+}
+
+.theme-toggle:hover {
+  color: var(--red);
+}
+
+.theme-toggle .when-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .when-dark {
+    display: inline;
+  }
+  :root:not([data-theme="light"]) .theme-toggle .when-light {
+    display: none;
+  }
+}
+
+:root[data-theme="dark"] .theme-toggle .when-dark {
+  display: inline;
+}
+
+:root[data-theme="dark"] .theme-toggle .when-light {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ *
+ * Hero
+ * ------------------------------------------------------------------ */
+
+.hero {
+  /* Where the orbit sits and how big it is. Orbit.tsx reads these. */
+  --ox: 50%;
+  --oy: 27%;
+  --os: 0.37;
+
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    --ox: 67%;
+    --oy: 41%;
+    --os: 0.17;
+  }
+}
+
+/* Graph paper, fading out toward the fold so the page below is plain. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 2rem;
+  align-content: end;
+  min-height: 100svh;
+  padding: 50svh var(--gutter) 2.25rem;
+  pointer-events: none;
+}
+
+.hero-inner > * {
+  pointer-events: auto;
+}
+
+@media (min-width: 900px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: end;
+    gap: 3rem;
+    padding-top: 6rem;
+  }
+}
+
+/*
+ * The name. Two lines set at different widths of the same typeface so both
+ * fill the same measure: the long word condensed, the short one extended.
+ * Sizes are in container units, so the fit holds at every viewport.
+ */
+.name {
+  container-type: inline-size;
+  max-width: 34rem;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.name span {
+  display: block;
+  white-space: nowrap;
+}
+
+.name .first {
+  font-stretch: 62%;
+  font-size: 31.1cqi;
+  line-height: 0.8;
+}
+
+.name .last {
+  font-stretch: 125%;
+  font-size: 25.9cqi;
+  line-height: 0.86;
+  margin-left: -0.02em;
+}
+
+.hero-intro {
+  max-width: 31rem;
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.orbit-panel {
+  justify-self: start;
+}
+
+@media (min-width: 900px) {
+  .orbit-panel {
+    justify-self: end;
+    text-align: left;
+  }
+}
+
+.orbit-panel dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 1.25rem;
+  margin: 0;
+}
+
+.orbit-panel dt {
+  color: var(--graphite);
+}
+
+.orbit-panel dd {
+  margin: 0;
+}
+
+.orbit-panel .measured {
+  color: var(--red);
+}
+
+.orbit-controls {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.orbit-controls button {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.orbit-controls button:hover {
+  color: var(--red);
+}
+
+.orbit-controls button[hidden] {
+  display: none;
+}
+
+/* The red-pen note next to the orbit. Goes away once a star is thrown. */
+.orbit-hint {
+  position: absolute;
+  left: calc(var(--ox) + 1rem);
+  top: calc(var(--oy) + 14svh);
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0;
+  color: var(--red);
+  font-size: 0.95rem;
+  font-stretch: 88%;
+  font-weight: 500;
+  line-height: 1.2;
+  rotate: -3deg;
+  pointer-events: none;
+  transition: opacity 400ms;
+}
+
+.orbit-hint svg {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: none;
+  margin-top: -1.4rem;
+}
+
+.hero[data-touched] .orbit-hint {
+  opacity: 0;
+}
+
+@media (max-width: 899px) {
+  .orbit-hint {
+    left: 50%;
+    top: calc(var(--oy) + 17svh);
+    translate: -50% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-hint,
+  .orbit-controls {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * The sheet: everything below the hero
+ * ------------------------------------------------------------------ */
+
+.sheet {
+  position: relative;
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  padding: clamp(3.5rem, 9vw, 7rem) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.section-title {
+  margin: 0 0 2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-stretch: 80%;
+}
+
+@media (min-width: 900px) {
+  /* A notebook margin: section names live in it, a red rule closes it. */
+  .sheet::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--gutter) + 10.5rem);
+    width: 1px;
+    background: color-mix(in srgb, var(--red) 45%, transparent);
+  }
+
+  .section {
+    display: grid;
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+  }
+
+  .section-title {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    margin: 0.35rem 0 0;
+    padding-right: 1.5rem;
+  }
+
+  .section-body {
+    padding-left: 3rem;
+  }
+}
+
+.section-lede {
+  max-width: 38rem;
+  margin: 0 0 3rem;
+  font-size: 1.2rem;
+  line-height: 1.45;
+}
+
+/* ------------------------------------------------------------------ *
+ * Featured projects
+ * ------------------------------------------------------------------ */
+
+.project {
+  display: grid;
+  gap: 2rem;
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.project:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.project:last-of-type {
+  padding-bottom: 0;
+}
+
+@media (min-width: 1100px) {
+  .project {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 4rem;
+    align-items: start;
+  }
+}
+
+.project h3 {
+  margin: 0;
+  font-size: clamp(2.6rem, 6.2vw, 4.6rem);
+}
+
+.project .line {
+  max-width: 28rem;
+  margin: 0.9rem 0 0;
+  font-size: 1.25rem;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.project .prose {
+  max-width: 33rem;
+  margin: 1.4rem 0 0;
+}
+
+.project .prose p {
+  margin: 0 0 0.9rem;
+}
+
+.facts {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 33rem;
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.facts .value {
+  font-weight: 700;
+  font-stretch: 85%;
+  font-variant-numeric: tabular-nums;
+}
+
+.project .meta {
+  max-width: 33rem;
+  margin: 1.6rem 0 0;
+  font-size: 0.95rem;
+  color: var(--graphite);
+}
+
+.project .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  margin: 0.9rem 0 0;
+  font-weight: 600;
+}
+
+/* A screenshot taped into the notebook. */
+.shot {
+  position: relative;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem;
+  background: var(--frame);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 18px 30px -22px rgb(0 0 0 / 0.45);
+  rotate: -0.7deg;
+}
+
+.project:nth-of-type(even) .shot {
+  rotate: 0.6deg;
+}
+
+.shot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -0.7rem;
+  width: 5.5rem;
+  height: 1.4rem;
+  translate: -50% 0;
+  rotate: -1.5deg;
+  background: color-mix(in srgb, var(--paper) 55%, #c9c39a 45%);
+  opacity: 0.85;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.shot img,
+.shot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ------------------------------------------------------------------ *
+ * Red pen
+ * ------------------------------------------------------------------ */
+
+.mark {
+  position: relative;
+  white-space: nowrap;
+}
+
+.mark svg {
+  position: absolute;
+  left: -0.45em;
+  top: -0.22em;
+  width: calc(100% + 0.9em);
+  height: calc(100% + 0.44em);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.mark path {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Where the browser supports it, the pen stroke wipes in as it scrolls into view. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .mark svg {
+      animation: pen linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 32%;
+    }
+  }
+}
+
+@keyframes pen {
+  from {
+    clip-path: inset(-20% 105% -20% -5%);
+  }
+  to {
+    clip-path: inset(-20% -5% -20% -5%);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Lists: open source, experience, more work
+ * ------------------------------------------------------------------ */
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rows > li {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.rows > li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.row-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+}
+
+.row-head h3 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  font-stretch: 78%;
+  line-height: 1.15;
+}
+
+.row-head .aside {
+  color: var(--graphite);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rows p {
+  max-width: 40rem;
+  margin: 0.45rem 0 0;
+}
+
+.prs summary {
+  width: fit-content;
+  margin-top: 0.7rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.prs summary:hover {
+  color: var(--red);
+}
+
+.prs ol {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 46rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.prs li {
+  display: grid;
+  grid-template-columns: 4.2rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.prs .state {
+  color: var(--graphite);
+}
+
+.more-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.more-list li {
+  display: grid;
+  gap: 0.2rem 2rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.more-list li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+@media (min-width: 760px) {
+  .more-list li {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.more-list .name-cell {
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-stretch: 78%;
+}
+
+.more-list .note {
+  margin-left: 0.5rem;
+  color: var(--graphite);
+  font-size: 0.85rem;
+  font-weight: 400;
+  font-stretch: 100%;
+}
+
+.more-list p {
+  max-width: 40rem;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * About and contact
+ * ------------------------------------------------------------------ */
+
+.about-grid {
+  display: grid;
+  gap: 3rem;
+}
+
+@media (min-width: 1100px) {
+  .about-grid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: 4rem;
+  }
+}
+
+.about-grid .bio p {
+  max-width: 36rem;
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+.plain-list {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plain-list strong {
+  font-weight: 700;
+}
+
+.subhead {
+  margin: 0 0 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--graphite);
+}
+
+.contact-email {
+  display: inline-block;
+  margin: 0;
+  font-size: clamp(1.7rem, 5.4vw, 4rem);
+  text-decoration-color: var(--hairline);
+  overflow-wrap: anywhere;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 600;
+}
+
+.site-footer {
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 3rem;
+  border-top: 1px solid var(--hairline);
+  color: var(--graphite);
+  font-size: 0.9rem;
+}
+
+.site-footer p {
+  max-width: 44rem;
+  margin: 0;
+}
