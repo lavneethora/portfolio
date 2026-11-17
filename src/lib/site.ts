@@ -9,7 +9,7 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lavneethora
 
 export const site = {
   name: "Lavneet Hora",
-  title: "Lavneet Hora, software engineer",
+  title: "Lavneet Hora",
   description:
     "CS student at Texas Tech who builds and ships software: Nudge, RaiderRating, FindMySpot, a 3D gravity simulator, and open source fixes merged at Harvey and Databricks.",
   email: "31lavneet@gmail.com",
