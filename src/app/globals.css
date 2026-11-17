@@ -119,6 +119,11 @@
   }
 }
 
+/* The crew footer carries the page background, so it needs its own edge. */
+.crew-footer {
+  border-top: 1px solid var(--hairline);
+}
+
 .skip-link {
   position: absolute;
   left: var(--gutter);
