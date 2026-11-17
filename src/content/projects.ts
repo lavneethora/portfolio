@@ -136,10 +136,10 @@ export const projects: Project[] = [
       { label: "Code", href: "https://github.com/lavneethora/three-body" },
     ],
     image: {
-      src: "/work/three-body.jpg",
-      alt: "A ray-traced black hole in the simulator, its glowing disk bent around the shadow, with two planets on tilted orbits.",
-      width: 1600,
-      height: 1040,
+      src: "/work/three-body-black-hole.jpg",
+      alt: "A ray-traced black hole in the simulator, seen nearly edge on, its glowing disk bent up and over the shadow.",
+      width: 1180,
+      height: 718,
     },
   },
   {
