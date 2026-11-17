@@ -19,11 +19,14 @@ const PERTURBED_SOFTENING = 2e-3;
 const ETA = 0.01;
 const DT_MIN = 1e-5;
 
-/** AU. A body is called ejected once it is unbound and this far out. */
-const ESCAPE_DISTANCE = 6;
+/**
+ * AU. A body is called ejected once it is unbound and this far out, which is
+ * about where it leaves the edge of the hero on a laptop screen.
+ */
+const ESCAPE_DISTANCE = 3;
 
 /** Largest kick a flick can give, as a multiple of the orbit's own speed scale. */
-export const MAX_FLICK_SPEED = 1.6 * K_GAUSS;
+export const MAX_FLICK_SPEED = 3 * K_GAUSS;
 
 /**
  * The hero orbit: a figure eight that runs untouched on a fixed symplectic
@@ -95,14 +98,33 @@ export class OrbitSim {
   /**
    * Add a velocity kick to one body, in AU/day.
    *
+   * A kick gives the whole system net momentum, which on screen would carry
+   * all three bodies off the page together. So the kick is followed by a
+   * shift back into the centre-of-mass frame: the thrown body goes one way
+   * and the other two recoil the other way, as seen from the system itself.
+   *
    * The energy reference is re-measured afterwards, so the drift readout
    * reports integration error since the throw and not the throw itself.
    */
   flick(body: number, dvx: number, dvy: number): void {
     const speed = Math.hypot(dvx, dvy);
     const scale = speed > MAX_FLICK_SPEED ? MAX_FLICK_SPEED / speed : 1;
-    this.state.vel[body * 3] += dvx * scale;
-    this.state.vel[body * 3 + 1] += dvy * scale;
+    const { n, mass, vel } = this.state;
+    vel[body * 3] += dvx * scale;
+    vel[body * 3 + 1] += dvy * scale;
+
+    let m = 0;
+    let px = 0;
+    let py = 0;
+    for (let i = 0; i < n; i++) {
+      m += mass[i];
+      px += mass[i] * vel[i * 3];
+      py += mass[i] * vel[i * 3 + 1];
+    }
+    for (let i = 0; i < n; i++) {
+      vel[i * 3] -= px / m;
+      vel[i * 3 + 1] -= py / m;
+    }
 
     this.fixedStep = false;
     this.softening = PERTURBED_SOFTENING;
