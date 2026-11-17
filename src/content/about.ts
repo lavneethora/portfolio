@@ -1,7 +1,7 @@
 /** Hero intro, bio, awards, and the off-topic list. */
 
 export const intro =
-  "I'm a computer science student at Texas Tech and I like building things people end up using. Texas Tech students check professors with my Chrome extension, Nudge texts people before a free trial charges them, and Harvey and Databricks have merged my pull requests.";
+  "I'm a computer science student at Texas Tech and I like building things people end up using. My Chrome extension has 800+ users at Texas Tech, Nudge texts people before a free trial charges them, and Harvey and Databricks have merged my pull requests.";
 
 export const bio = [
   "I study computer science at Texas Tech (Honors, with minors in math and bioengineering) and graduate in May 2027.",
