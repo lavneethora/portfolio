@@ -25,7 +25,11 @@ interface RepoNote {
   did: string;
 }
 
-/** Listed in this order. Repos not named here are grouped at the end. */
+/**
+ * The main list: repos where pull requests have actually merged, in this
+ * order. Anything not named here (repos with only open pull requests, such
+ * as SGLang) is grouped at the end under "Also under review".
+ */
 const featured: RepoNote[] = [
   {
     repo: "harveyai/harvey-labs",
@@ -44,12 +48,6 @@ const featured: RepoNote[] = [
     name: "Provena",
     what: "Tamper-evident audit trails for AI agents",
     did: "Mostly storage fixes, like pinning pooled Postgres connections to UTC so chain verification survives a non-UTC time zone.",
-  },
-  {
-    repo: "sgl-project/sglang",
-    name: "SGLang",
-    what: "A serving framework for large language models",
-    did: "Two fixes under review, one for tool-call parsing dropping text before a partial marker.",
   },
 ];
 
