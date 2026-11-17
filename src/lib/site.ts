@@ -1,8 +1,11 @@
 /**
- * Site-wide facts. Set NEXT_PUBLIC_SITE_URL to the real domain when
- * deploying so canonical links, the sitemap and link previews point at it.
+ * Site-wide facts.
+ *
+ * The production domain is the default rather than an environment variable,
+ * so a build is never quietly wrong about its own address. Preview and local
+ * builds can still override it with NEXT_PUBLIC_SITE_URL.
  */
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lavneethora.me";
 
 export const site = {
   name: "Lavneet Hora",
