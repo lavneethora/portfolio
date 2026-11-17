@@ -78,9 +78,9 @@ export default function Home() {
       </Orbit>
 
       <main className="sheet">
-        <section className="section" id="work" aria-labelledby="work-title">
-          <h2 className="section-title" id="work-title">
-            Work
+        <section className="section" id="projects" aria-labelledby="projects-title">
+          <h2 className="section-title" id="projects-title">
+            Projects
           </h2>
           <div className="section-body">
             {projects.map((project, i) => (
@@ -89,7 +89,7 @@ export default function Home() {
 
             <article className="project" id="more">
               <div>
-                <h3 className="display">More Work</h3>
+                <h3 className="display">More Projects</h3>
                 <p className="line">{moreIntro}</p>
                 <p className="links">
                   <Anchor href={site.github}>See them on GitHub</Anchor>
