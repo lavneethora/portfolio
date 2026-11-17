@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Anchor } from "@/components/Anchor";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SITE_URL, site } from "@/lib/site";
 import "./globals.css";
@@ -81,16 +82,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body>
-        <a className="skip-link" href="#work">
+        <Anchor className="skip-link" href="#work">
           Skip to work
-        </a>
+        </Anchor>
 
         <header className="site-header">
           <nav aria-label="Sections">
-            <a href="#work">Work</a>
-            <a href="#open-source">Open Source</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
+            <Anchor href="#work">Work</Anchor>
+            <Anchor href="#open-source">Open Source</Anchor>
+            <Anchor href="#about">About</Anchor>
+            <Anchor href="#contact">Contact</Anchor>
             <ThemeToggle />
           </nav>
         </header>
