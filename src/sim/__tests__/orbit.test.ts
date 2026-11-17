@@ -70,9 +70,21 @@ describe("flicking a body", () => {
 
   it("clamps the kick to the maximum flick speed", () => {
     const sim = new OrbitSim();
-    const before = sim.state.vel[0];
+    // Measured against another body, so the recentring does not matter.
+    const before = sim.state.vel[0] - sim.state.vel[3];
     sim.flick(0, 100, 0);
-    expect(sim.state.vel[0] - before).toBeCloseTo(MAX_FLICK_SPEED, 12);
+    expect(sim.state.vel[0] - sim.state.vel[3] - before).toBeCloseTo(MAX_FLICK_SPEED, 12);
+  });
+
+  it("leaves the system with no net momentum, so it stays on the page", () => {
+    const sim = new OrbitSim();
+    sim.advance(80, Infinity);
+    sim.flick(2, 0.7 * MAX_FLICK_SPEED, -0.4 * MAX_FLICK_SPEED);
+    for (let k = 0; k < 2; k++) {
+      let p = 0;
+      for (let i = 0; i < sim.state.n; i++) p += sim.state.mass[i] * sim.state.vel[i * 3 + k];
+      expect(Math.abs(p)).toBeLessThan(1e-15);
+    }
   });
 
   it("keeps energy error small through the chaos that follows", () => {
