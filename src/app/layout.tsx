@@ -91,6 +91,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <nav aria-label="Sections">
             <Anchor href="#projects">Projects</Anchor>
             <Anchor href="#open-source">Open Source</Anchor>
+            <Anchor href="#experience">Experience</Anchor>
             <Anchor href="#about">About</Anchor>
             <Anchor href="#contact">Contact</Anchor>
             <ThemeToggle />
