@@ -4,7 +4,7 @@ import { Mark } from "@/components/Mark";
 import { Orbit } from "@/components/Orbit";
 import { PrState } from "@/components/PrState";
 import { Taped } from "@/components/Taped";
-import { askMeAbout, awards, bio, intro } from "@/content/about";
+import { awards, bio, intro } from "@/content/about";
 import { roles } from "@/content/experience";
 import { githubShot, moreIntro } from "@/content/more";
 import { fetchedAt, otherOpen, repoGroups, totalMerged } from "@/content/opensource";
@@ -88,7 +88,7 @@ export default function Home() {
 
             <article className="project" id="more">
               <div>
-                <h3 className="display">More work</h3>
+                <h3 className="display">More Work</h3>
                 <p className="line">{moreIntro}</p>
                 <p className="links">
                   <a href={site.github}>See them on GitHub</a>
@@ -110,7 +110,7 @@ export default function Home() {
 
         <section className="section" id="open-source" aria-labelledby="oss-title">
           <h2 className="section-title" id="oss-title">
-            Open source
+            Open Source
           </h2>
           <div className="section-body">
             <p className="section-lede">
@@ -151,7 +151,7 @@ export default function Home() {
               {otherOpen.length > 0 ? (
                 <li>
                   <div className="row-head">
-                    <h3>Also under review</h3>
+                    <h3>More Pull Requests</h3>
                     <span className="aside">
                       <PrState state="open">{otherOpen.length} open</PrState>
                     </span>
@@ -208,32 +208,18 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="grid gap-10">
-              <div>
-                <h3 className="subhead">Awards</h3>
-                <ul className="plain-list">
-                  {awards.map((award) => (
-                    <li key={award.name}>
-                      <strong>
-                        {award.href ? <a href={award.href}>{award.name}</a> : award.name}
-                      </strong>
-                      {award.detail ? <span className="quiet"> {award.detail}</span> : null}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="subhead">Ask me about</h3>
-                <ul className="plain-list">
-                  {askMeAbout.map((item) => (
-                    <li key={item.topic}>
-                      <strong>{item.topic}.</strong>
-                      <span className="quiet"> {item.line}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div>
+              <h3 className="subhead">Awards</h3>
+              <ul className="plain-list">
+                {awards.map((award) => (
+                  <li key={award.name}>
+                    <strong>
+                      {award.href ? <a href={award.href}>{award.name}</a> : award.name}
+                    </strong>
+                    {award.detail ? <span className="quiet"> {award.detail}</span> : null}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
@@ -254,7 +240,7 @@ export default function Home() {
                 <a href={site.github}>GitHub</a>
               </li>
               <li>
-                <a href={site.resume}>Resume (PDF)</a>
+                <a href={site.resume}>Resume</a>
               </li>
             </ul>
           </div>
