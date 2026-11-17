@@ -32,7 +32,9 @@ export function Taped({ children }: { children: ReactNode }) {
         el.dataset.tape = "on";
         io.disconnect();
       },
-      { threshold: 0.3 },
+      // Wait until half the picture has cleared a line a fifth of the way up
+      // the screen. Any earlier and it tapes itself before you are looking.
+      { threshold: 0.5, rootMargin: "0px 0px -20% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
