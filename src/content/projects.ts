@@ -83,7 +83,7 @@ export const projects: Project[] = [
     name: "RaiderRating",
     line: "Professor ratings and grade distributions inside Texas Tech's schedule builder.",
     about:
-      "Registration at Tech used to mean the schedule builder in one tab and Rate My Professors in another. RaiderRating puts the rating next to each professor's name, with the A to F breakdown for that exact professor and course one click away.",
+      "Registration at Tech used to mean the schedule builder in one tab and Rate My Professors in another. RaiderRating puts the rating next to each professor's name, with the A to F breakdown for that exact professor and course one click away. It also sends the CRN straight to the registration portal in one click, so nobody has to copy it across by hand.",
     hard:
       "The grade data wasn't sitting behind an API I could call, so I scraped 5,000+ grade records with Playwright and serve them from an Express API with an in-memory cache. Name matching was the other problem. Two instructors who shared a last name used to get each other's ratings.",
     facts: [
