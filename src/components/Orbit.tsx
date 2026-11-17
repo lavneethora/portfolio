@@ -11,6 +11,10 @@ const DAYS_PER_SECOND = 40;
 const TRAIL_STABLE = FIGURE_EIGHT_PERIOD_DAYS * 0.3;
 const TRAIL_PERTURBED = FIGURE_EIGHT_PERIOD_DAYS * 1.1;
 
+/** The figure eight's extent in AU, with a little air around it. */
+const ORBIT_WIDTH_AU = 2.45;
+const ORBIT_HEIGHT_AU = 1.1;
+
 /** How many alpha steps a trail fades through. Each one is a canvas stroke. */
 const FADE_STEPS = 14;
 
@@ -63,6 +67,7 @@ function formatDrift(drift: number): string {
 export function Orbit({ children }: { children: ReactNode }) {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const driftRef = useRef<HTMLElement>(null);
   const statusRef = useRef<HTMLSpanElement>(null);
   const throwRef = useRef<HTMLButtonElement>(null);
@@ -71,8 +76,9 @@ export function Orbit({ children }: { children: ReactNode }) {
   useEffect(() => {
     const section = sectionRef.current;
     const canvas = canvasRef.current;
+    const stage = stageRef.current;
     const ctx = canvas?.getContext("2d");
-    if (!section || !canvas || !ctx) return;
+    if (!section || !canvas || !stage || !ctx) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const sim = new OrbitSim();
@@ -106,13 +112,15 @@ export function Orbit({ children }: { children: ReactNode }) {
 
     function resize() {
       const rect = section!.getBoundingClientRect();
-      const cs = getComputedStyle(section!);
+      const box = stage!.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       view.w = rect.width;
       view.h = rect.height;
-      view.cx = (parseFloat(cs.getPropertyValue("--ox")) / 100) * rect.width;
-      view.cy = (parseFloat(cs.getPropertyValue("--oy")) / 100) * rect.height;
-      view.scale = Math.min(parseFloat(cs.getPropertyValue("--os")) * rect.width, rect.height * 0.4);
+      // The orbit goes in the middle of the stage box, as large as fits.
+      view.cx = box.left - rect.left + box.width / 2;
+      view.cy = box.top - rect.top + box.height / 2;
+      view.scale = Math.min(box.width / ORBIT_WIDTH_AU, box.height / ORBIT_HEIGHT_AU);
+      section!.style.setProperty("--orbit-drop", `${(ORBIT_HEIGHT_AU / 3) * view.scale}px`);
       canvas!.width = Math.round(rect.width * dpr);
       canvas!.height = Math.round(rect.height * dpr);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -415,6 +423,7 @@ export function Orbit({ children }: { children: ReactNode }) {
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(section);
+    resizeObserver.observe(stage);
 
     const io = new IntersectionObserver(([entry]) => {
       onScreen = entry.isIntersecting;
@@ -480,17 +489,19 @@ export function Orbit({ children }: { children: ReactNode }) {
     <section ref={sectionRef} className="hero" aria-label="Introduction">
       <canvas ref={canvasRef} className="readout" aria-hidden="true" />
 
-      <p className="orbit-hint" aria-hidden="true">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M42 44C30 42 14 34 9 8" />
-          <path d="M3 17l6-10 9 7" />
-        </svg>
-        <span>
-          grab a star
-          <br />
-          and throw it
-        </span>
-      </p>
+      <div ref={stageRef} className="orbit-stage">
+        <p className="orbit-hint" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M42 44C30 42 14 34 9 8" />
+            <path d="M3 17l6-10 9 7" />
+          </svg>
+          <span>
+            grab a star
+            <br />
+            and throw it
+          </span>
+        </p>
+      </div>
 
       <div className="hero-inner">
         <div>{children}</div>
