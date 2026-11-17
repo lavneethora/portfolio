@@ -6,7 +6,7 @@ import { PrState } from "@/components/PrState";
 import { Taped } from "@/components/Taped";
 import { askMeAbout, awards, bio, intro } from "@/content/about";
 import { roles } from "@/content/experience";
-import { githubShot, more, moreIntro } from "@/content/more";
+import { githubShot, moreIntro } from "@/content/more";
 import { fetchedAt, otherOpen, repoGroups, totalMerged } from "@/content/opensource";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/lib/site";
@@ -90,19 +90,8 @@ export default function Home() {
               <div>
                 <h3 className="display">More work</h3>
                 <p className="line">{moreIntro}</p>
-                <ul className="more-list">
-                  {more.map((item) => (
-                    <li key={item.name}>
-                      <span className="name-cell">
-                        {item.href ? <a href={item.href}>{item.name}</a> : item.name}
-                        {item.note ? <span className="note">{item.note}</span> : null}
-                      </span>
-                      <p>{item.line}</p>
-                    </li>
-                  ))}
-                </ul>
                 <p className="links">
-                  <a href={site.github}>Everything on GitHub</a>
+                  <a href={site.github}>See them on GitHub</a>
                 </p>
               </div>
 
