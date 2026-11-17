@@ -121,6 +121,11 @@ export function Orbit({ children }: { children: ReactNode }) {
       view.cy = box.top - rect.top + box.height / 2;
       view.scale = Math.min(box.width / ORBIT_WIDTH_AU, box.height / ORBIT_HEIGHT_AU);
       section!.style.setProperty("--orbit-drop", `${(ORBIT_HEIGHT_AU / 3) * view.scale}px`);
+      // Hang the graph paper off the orbit's own centre, so a major line runs
+      // through the crossing of the eight and the two lobes mirror each other
+      // across it. Rounded, so the 1px rules stay crisp.
+      section!.style.setProperty("--grid-x", `${Math.round(view.cx)}px`);
+      section!.style.setProperty("--grid-y", `${Math.round(view.cy)}px`);
       canvas!.width = Math.round(rect.width * dpr);
       canvas!.height = Math.round(rect.height * dpr);
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
