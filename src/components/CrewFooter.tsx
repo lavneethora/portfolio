@@ -171,6 +171,61 @@ export const stepFloater = (
   return f;
 };
 
+export type Shot = {
+  /** Head position in the world box, px. */
+  x: number;
+  y: number;
+  /** Velocity, px per second. */
+  vx: number;
+  vy: number;
+  /** Length of the streak behind the head, px. */
+  len: number;
+  /** Seconds left of this run, and how long the whole run lasts. */
+  life: number;
+  span: number;
+  /** Seconds until the next run. Counts down only while life is 0. */
+  wait: number;
+};
+
+/**
+ * One step of a shooting star. It waits out its gap, streaks across on a
+ * shallow diagonal, then waits again. Nothing here reads the pointer: these
+ * live far behind the letters and are not meant to be caught.
+ *
+ * Returns the head opacity, which rises and falls over the run so the star
+ * never pops in or out.
+ */
+export const stepShot = (sh: Shot, dt: number, w: number, h: number, rand: () => number): number => {
+  const step = clamp(Number.isFinite(dt) ? dt : 0, 0, 0.05);
+  if (sh.life <= 0) {
+    sh.wait -= step;
+    if (sh.wait > 0) return 0;
+    // Launch: somewhere in the upper left two thirds, heading down and right,
+    // or the mirror of that.
+    const toRight = rand() < 0.62;
+    const angle = (14 + rand() * 24) * (Math.PI / 180);
+    const speed = 420 + rand() * 340;
+    sh.x = (toRight ? -0.08 + rand() * 0.6 : 0.48 + rand() * 0.6) * w;
+    sh.y = (-0.12 + rand() * 0.55) * h;
+    sh.vx = Math.cos(angle) * speed * (toRight ? 1 : -1);
+    sh.vy = Math.sin(angle) * speed;
+    sh.len = 90 + rand() * 110;
+    sh.span = 0.62 + rand() * 0.42;
+    sh.life = sh.span;
+    return 0;
+  }
+  sh.life -= step;
+  sh.x += sh.vx * step;
+  sh.y += sh.vy * step;
+  if (sh.life <= 0) {
+    sh.life = 0;
+    sh.wait = 8 + rand() * 14;
+    return 0;
+  }
+  const progress = 1 - sh.life / Math.max(1e-6, sh.span);
+  return Math.sin(progress * Math.PI);
+};
+
 /**
  * The storyboard, in ms from the moment the footer comes into view: the
  * ground draws, the letters stamp left to right, then the crew arrives and
@@ -217,6 +272,11 @@ export interface CrewFooterProps {
   doodles?: DoodleKind[];
   /** How many doodles at a time. Defaults to 10. */
   doodleCount?: number;
+  /**
+   * How many shooting stars can be in flight at once, far behind the
+   * letters. They ignore the pointer. 0 turns them off.
+   */
+  shootingStars?: number;
   /** Any CSS colour, including var() references to the page's own tokens. */
   palette?: { background?: string; ink?: string; accent?: string };
   /** Display face for the wordmark. Heavy grotesks stamp best. */
@@ -523,6 +583,7 @@ export default function CrewFooter({
   crew = [],
   doodles = [],
   doodleCount = 10,
+  shootingStars = 2,
   palette,
   fontFamily = DEFAULT_FONT,
   tracking = -0.02,
@@ -540,6 +601,7 @@ export default function CrewFooter({
   const crewLayerRefs = React.useRef([] as (SVGGElement | null)[]);
   const eyeRefs = React.useRef([] as { blink: SVGGElement | null; pupil: SVGGElement | null }[][]);
   const doodleRefs = React.useRef([] as (HTMLDivElement | null)[]);
+  const shotRefs = React.useRef([] as (HTMLDivElement | null)[]);
 
   const [metrics, setMetrics] = React.useState(() => estimate(word));
   const [play, setPlay] = React.useState(false);
@@ -653,8 +715,11 @@ export default function CrewFooter({
     return Array.from({ length: n }, (_, k) => ({ kind: kinds[k % kinds.length], size: 22 + hash(k * 4.7) * 14 }));
   }, [doodles, doodleCount]);
 
+  const shotCount = clamp(Math.floor(shootingStars) || 0, 0, 6);
+
   const sim = React.useRef({
     floaters: [] as Floater[],
+    shots: [] as Shot[],
     w: 0,
     h: 0,
     px: NaN,
@@ -853,6 +918,38 @@ export default function CrewFooter({
         }
       }
 
+      // Shooting stars, far behind the letters. No pointer, by design.
+      if (world && shotCount > 0 && play && !reduced) {
+        if (s.shots.length !== shotCount) {
+          s.shots = Array.from({ length: shotCount }, (_, k) => ({
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            len: 0,
+            life: 0,
+            span: 1,
+            // Stagger the first ones so they do not all arrive together.
+            wait: 2 + k * 4 + hash(k * 13.7) * 6,
+          }));
+        }
+        for (let k = 0; k < s.shots.length; k++) {
+          const sh = s.shots[k];
+          const op = stepShot(sh, dt, s.w, s.h, rand);
+          const el = shotRefs.current[k];
+          if (!el) continue;
+          if (op <= 0) {
+            el.style.opacity = "0";
+            continue;
+          }
+          const deg = (Math.atan2(sh.vy, sh.vx) * 180) / Math.PI;
+          el.style.width = sh.len.toFixed(0) + "px";
+          el.style.opacity = (op * 0.5).toFixed(3);
+          el.style.transform =
+            "translate3d(" + (sh.x - sh.len).toFixed(1) + "px," + (sh.y - 1).toFixed(1) + "px,0) rotate(" + deg.toFixed(1) + "deg)";
+        }
+      }
+
       // Line boil: three hand-drawn takes swapped at 8 fps.
       if (!reduced && now - boilAt > 125) {
         boilAt = now;
@@ -863,7 +960,7 @@ export default function CrewFooter({
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [placed, play, reduced, interactive, uid, tl.doodles, paintDoodles]);
+  }, [placed, play, reduced, interactive, uid, tl.doodles, paintDoodles, shotCount]);
 
   React.useEffect(() => () => window.clearTimeout(talkTimer.current), []);
 
@@ -969,6 +1066,14 @@ export default function CrewFooter({
       <style>{CSS}</style>
 
       <div className="dcf-world" ref={worldRef}>
+        {shotCount > 0 && (
+          <div className="dcf-sky" aria-hidden="true">
+            {Array.from({ length: shotCount }, (_, k) => (
+              <div key={k} className="dcf-shot" ref={(el) => void (shotRefs.current[k] = el)} />
+            ))}
+          </div>
+        )}
+
         <div className="dcf-stage">
           <h2 className="dcf-sr">{wordmark}</h2>
           <svg
@@ -1157,6 +1262,11 @@ const CSS =
   ".dcf-bubble::after{content:'';position:absolute;left:50%;bottom:-9px;width:14px;height:14px;background:var(--dcf-bg);border-right:2px solid var(--dcf-ink);border-bottom:2px solid var(--dcf-ink);transform:translateX(-50%) rotate(45deg) skew(8deg,8deg)}" +
   ".dcf-bubble.is-left{transform:translate(-88%,-100%) rotate(2deg);transform-origin:88% 100%}" +
   ".dcf-bubble.is-left::after{left:88%}" +
+  // Shooting stars sit under the stage (z-index 1), so the letters and the
+  // crew pass in front of them, and they never take the pointer.
+  ".dcf-sky{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}" +
+  ".dcf-shot{position:absolute;left:0;top:0;height:2px;opacity:0;transform-origin:100% 50%;border-radius:2px;background:linear-gradient(90deg,transparent,var(--dcf-ink));will-change:transform,opacity}" +
+  ".dcf-shot::after{content:'';position:absolute;right:-1px;top:-1px;width:4px;height:4px;border-radius:50%;background:var(--dcf-ink)}" +
   ".dcf-doodles{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}" +
   ".dcf-doodle{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;will-change:transform;touch-action:manipulation}" +
   ".dcf-doodle-in{display:block;width:100%;height:100%}" +
