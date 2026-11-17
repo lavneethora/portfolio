@@ -40,4 +40,6 @@ npm run prs     # refresh src/data/prs.json from GitHub
 
 ## Deploying
 
-Set `NEXT_PUBLIC_SITE_URL` to the real domain so canonical links, the sitemap and link previews point at it.
+Deployed on Vercel at [lavneethora.me](https://lavneethora.me). Pushing to `main` deploys.
+
+The production domain is the default in `src/lib/site.ts`, so canonical links, the sitemap and the link preview card are right without any environment variable. Set `NEXT_PUBLIC_SITE_URL` only to override it, for example on a preview build.
