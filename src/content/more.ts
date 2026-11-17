@@ -1,9 +1,9 @@
 /**
- * The "More work" entry at the end of Work. It points at GitHub instead of
- * listing every smaller project.
+ * The "More Projects" entry at the end of Projects. It points at GitHub
+ * instead of listing every smaller project.
  */
 
-/** The sentence under the "More work" heading. */
+/** The sentence under the "More Projects" heading. */
 export const moreIntro = "Smaller projects and hackathon builds.";
 
 /** The picture taped next to it: the repository list on my GitHub profile. */
