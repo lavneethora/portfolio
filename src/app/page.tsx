@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Anchor } from "@/components/Anchor";
 import { CeremoniDiagram } from "@/components/CeremoniDiagram";
 import { Mark } from "@/components/Mark";
 import { Orbit } from "@/components/Orbit";
@@ -29,7 +30,7 @@ function ProjectEntry({ project, first }: { project: Project; first: boolean }) 
             return (
               <li key={fact.value}>
                 <span className="value">
-                  {fact.href ? <a href={fact.href}>{value}</a> : value}
+                  {fact.href ? <Anchor href={fact.href}>{value}</Anchor> : value}
                 </span>
                 <span>{fact.label}</span>
               </li>
@@ -40,9 +41,9 @@ function ProjectEntry({ project, first }: { project: Project; first: boolean }) 
         <p className="meta">{project.stack}</p>
         <p className="links">
           {project.links.map((link) => (
-            <a key={link.href} href={link.href}>
+            <Anchor key={link.href} href={link.href}>
               {link.label}
-            </a>
+            </Anchor>
           ))}
         </p>
       </div>
@@ -91,7 +92,7 @@ export default function Home() {
                 <h3 className="display">More Work</h3>
                 <p className="line">{moreIntro}</p>
                 <p className="links">
-                  <a href={site.github}>See them on GitHub</a>
+                  <Anchor href={site.github}>See them on GitHub</Anchor>
                 </p>
               </div>
 
@@ -124,7 +125,7 @@ export default function Home() {
                 <li key={group.repo}>
                   <div className="row-head">
                     <h3>
-                      <a href={`https://github.com/${group.repo}`}>{group.name}</a>
+                      <Anchor href={`https://github.com/${group.repo}`}>{group.name}</Anchor>
                     </h3>
                     <span className="aside">
                       {group.merged > 0 ? (
@@ -141,7 +142,7 @@ export default function Home() {
                       {group.prs.map((pr) => (
                         <li key={pr.url}>
                           <PrState state={pr.state}>{pr.state}</PrState>
-                          <a href={pr.url}>{pr.title}</a>
+                          <Anchor href={pr.url}>{pr.title}</Anchor>
                         </li>
                       ))}
                     </ol>
@@ -162,9 +163,9 @@ export default function Home() {
                       {otherOpen.map((pr) => (
                         <li key={pr.url}>
                           <PrState state={pr.state}>{pr.state}</PrState>
-                          <a href={pr.url}>
+                          <Anchor href={pr.url}>
                             {pr.repo.split("/")[1]}: {pr.title}
-                          </a>
+                          </Anchor>
                         </li>
                       ))}
                     </ol>
@@ -214,7 +215,7 @@ export default function Home() {
                 {awards.map((award) => (
                   <li key={award.name}>
                     <strong>
-                      {award.href ? <a href={award.href}>{award.name}</a> : award.name}
+                      {award.href ? <Anchor href={award.href}>{award.name}</Anchor> : award.name}
                     </strong>
                     {award.detail ? <span className="quiet"> {award.detail}</span> : null}
                   </li>
@@ -229,18 +230,18 @@ export default function Home() {
             Contact
           </h2>
           <div className="section-body">
-            <a className="contact-email display" href={`mailto:${site.email}`}>
+            <Anchor className="contact-email display" href={`mailto:${site.email}`}>
               {site.email}
-            </a>
+            </Anchor>
             <ul className="contact-links">
               <li>
-                <a href={site.linkedin}>LinkedIn</a>
+                <Anchor href={site.linkedin}>LinkedIn</Anchor>
               </li>
               <li>
-                <a href={site.github}>GitHub</a>
+                <Anchor href={site.github}>GitHub</Anchor>
               </li>
               <li>
-                <a href={site.resume}>Resume</a>
+                <Anchor href={site.resume}>Resume</Anchor>
               </li>
             </ul>
           </div>
