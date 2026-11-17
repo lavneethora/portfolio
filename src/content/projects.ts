@@ -148,7 +148,7 @@ export const projects: Project[] = [
     ],
     stack: "TypeScript, Next.js, three.js, GLSL",
     links: [
-      { label: "Run the simulator", href: "https://threebody-sim.vercel.app" },
+      { label: "Run the Simulator", href: "https://threebody-sim.vercel.app" },
       { label: "Code", href: "https://github.com/lavneethora/three-body" },
     ],
     image: {
