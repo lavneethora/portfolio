@@ -168,7 +168,7 @@
   z-index: 10;
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1.5rem;
   padding: 1.25rem var(--gutter);
   font-size: 0.95rem;
@@ -185,14 +185,8 @@
   text-decoration: none;
 }
 
-/* On a phone the nav gets the whole row. The same fact is in About. */
 @media (max-width: 699px) {
-  .site-header > p {
-    display: none;
-  }
-
   .site-header nav {
-    justify-content: flex-start;
     gap: 0.25rem 1.1rem;
   }
 }
@@ -747,31 +741,50 @@
   pointer-events: none;
 }
 
+/*
+ * How much of the pen stroke is still unwritten, 100 to 0. Registered so it
+ * interpolates as a number, and inherited so the animation can sit on the
+ * svg (which has a layout box that a view() timeline can measure) while the
+ * path inside reads the value.
+ */
+@property --draw {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 .mark path {
   fill: none;
   stroke: var(--red);
-  stroke-width: 1.5;
+  stroke-width: 2.4;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
+  /* pathLength="100" (Mark.tsx) makes one dash cover any of these paths. */
+  stroke-dasharray: 100;
+  stroke-dashoffset: var(--draw, 0);
 }
 
-/* Where the browser supports it, the pen stroke wipes in as it scrolls into view. */
+/*
+ * Where the browser supports it the pen draws itself as the mark scrolls up
+ * the page, over enough distance to actually watch. Anywhere else the mark
+ * is simply there, because --draw stays at 0.
+ */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .mark svg {
       animation: pen linear both;
       animation-timeline: view();
-      animation-range: entry 30% cover 32%;
+      animation-range: entry 15% cover 45%;
     }
   }
 }
 
 @keyframes pen {
   from {
-    clip-path: inset(-20% 105% -20% -5%);
+    --draw: 100;
   }
   to {
-    clip-path: inset(-20% -5% -20% -5%);
+    --draw: 0;
   }
 }
 
@@ -936,16 +949,3 @@
   font-weight: 600;
 }
 
-.site-footer {
-  max-width: 82rem;
-  margin: 0 auto;
-  padding: 2rem var(--gutter) 3rem;
-  border-top: 1px solid var(--hairline);
-  color: var(--graphite);
-  font-size: 0.9rem;
-}
-
-.site-footer p {
-  max-width: 44rem;
-  margin: 0;
-}
