@@ -71,9 +71,9 @@ export const projects: Project[] = [
     hard:
       "The grade data wasn't sitting behind an API I could call, so I scraped 5,000+ grade records with Playwright and serve them from an Express API with an in-memory cache. Name matching was the other problem. Two instructors who shared a last name used to get each other's ratings.",
     facts: [
+      { value: "800+", pen: true, label: "users so far" },
       {
         value: "5.0 stars",
-        pen: true,
         label: "on the Chrome Web Store",
         href: "https://chromewebstore.google.com/detail/raiderrating/mfkadoinfgjghmfooigphelfpdicdfek",
       },
