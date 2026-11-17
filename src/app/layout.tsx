@@ -82,13 +82,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body>
-        <Anchor className="skip-link" href="#work">
-          Skip to work
+        <Anchor className="skip-link" href="#projects">
+          Skip to projects
         </Anchor>
 
         <header className="site-header">
           <nav aria-label="Sections">
-            <Anchor href="#work">Work</Anchor>
+            <Anchor href="#projects">Projects</Anchor>
             <Anchor href="#open-source">Open Source</Anchor>
             <Anchor href="#about">About</Anchor>
             <Anchor href="#contact">Contact</Anchor>
