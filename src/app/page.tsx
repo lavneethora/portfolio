@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CeremoniDiagram } from "@/components/CeremoniDiagram";
 import { Mark } from "@/components/Mark";
 import { Orbit } from "@/components/Orbit";
+import { Taped } from "@/components/Taped";
 import { askMeAbout, awards, bio, intro } from "@/content/about";
 import { roles } from "@/content/experience";
 import { more } from "@/content/more";
@@ -45,7 +46,7 @@ function ProjectEntry({ project, first }: { project: Project; first: boolean }) 
         </p>
       </div>
 
-      <figure className="shot">
+      <Taped>
         {project.image === "diagram" ? (
           <CeremoniDiagram />
         ) : (
@@ -58,7 +59,7 @@ function ProjectEntry({ project, first }: { project: Project; first: boolean }) 
             priority={first}
           />
         )}
-      </figure>
+      </Taped>
     </article>
   );
 }
