@@ -11,6 +11,9 @@ const DAYS_PER_SECOND = 40;
 const TRAIL_STABLE = FIGURE_EIGHT_PERIOD_DAYS * 0.3;
 const TRAIL_PERTURBED = FIGURE_EIGHT_PERIOD_DAYS * 1.1;
 
+/** How many alpha steps a trail fades through. Each one is a canvas stroke. */
+const FADE_STEPS = 14;
+
 /** Pixels. How close a pointer has to be to pick a body up. */
 const GRAB_MOUSE = 30;
 const GRAB_TOUCH = 46;
@@ -61,7 +64,7 @@ export function Orbit({ children }: { children: ReactNode }) {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const driftRef = useRef<HTMLElement>(null);
-  const statusRef = useRef<HTMLElement>(null);
+  const statusRef = useRef<HTMLSpanElement>(null);
   const throwRef = useRef<HTMLButtonElement>(null);
   const resetRef = useRef<HTMLButtonElement>(null);
 
@@ -78,6 +81,7 @@ export function Orbit({ children }: { children: ReactNode }) {
 
     const view = { w: 0, h: 0, cx: 0, cy: 0, scale: 1 };
     const colors = { ink: "#000", graphite: "#666", red: "#c00" };
+    let labelFont = "500 12px monospace";
     let drag: { body: number; x: number; y: number } | null = null;
     let raf = 0;
     let running = false;
@@ -95,6 +99,9 @@ export function Orbit({ children }: { children: ReactNode }) {
       colors.ink = cs.getPropertyValue("--ink").trim() || colors.ink;
       colors.graphite = cs.getPropertyValue("--graphite").trim() || colors.graphite;
       colors.red = cs.getPropertyValue("--red").trim() || colors.red;
+      // Read once here. Asking for computed style inside draw() would force
+      // a style recalculation on every frame.
+      labelFont = `500 12px ${getComputedStyle(canvas!).fontFamily}`;
     }
 
     function resize() {
@@ -157,9 +164,10 @@ export function Orbit({ children }: { children: ReactNode }) {
       // Ink: where the bodies have actually been. Older ink is fainter.
       c.strokeStyle = colors.ink;
       c.lineWidth = 1.7;
-      const chunk = 5;
       for (const tr of trails) {
         const n = tr.x.length;
+        // A fixed number of strokes per trail, however long it gets.
+        const chunk = Math.max(4, Math.ceil(n / FADE_STEPS));
         for (let start = 0; start < n - 1; start += chunk) {
           const end = Math.min(start + chunk, n - 1);
           c.globalAlpha = Math.pow((end + 1) / n, 1.7);
@@ -172,7 +180,7 @@ export function Orbit({ children }: { children: ReactNode }) {
 
       // The bodies, lettered like points in a diagram.
       c.globalAlpha = 1;
-      c.font = `500 12px ${getComputedStyle(canvas!).fontFamily}`;
+      c.font = labelFont;
       for (let i = 0; i < sim.state.n; i++) {
         const x = sx(sim.state.pos[i * 3]);
         const y = sy(sim.state.pos[i * 3 + 1]);
@@ -445,7 +453,10 @@ export function Orbit({ children }: { children: ReactNode }) {
     if (reducedMotion.matches) drawStill();
     else start();
     // The mono face may land after the first frame. Redraw the labels once it has.
-    document.fonts?.ready.then(draw);
+    document.fonts?.ready.then(() => {
+      readColors();
+      draw();
+    });
 
     return () => {
       stop();
@@ -495,8 +506,10 @@ export function Orbit({ children }: { children: ReactNode }) {
               0
             </dd>
             <dt>status</dt>
-            <dd ref={statusRef} role="status">
-              stable
+            <dd>
+              <span ref={statusRef} role="status">
+                stable
+              </span>
             </dd>
           </dl>
           <div className="orbit-controls">
