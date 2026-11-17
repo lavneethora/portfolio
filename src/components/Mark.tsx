@@ -6,11 +6,15 @@ import type { ReactNode } from "react";
  * The paths are drawn by hand in a 100 x 40 box and stretched over the
  * text. `vector-effect: non-scaling-stroke` (in globals.css) keeps the pen
  * the same thickness however far the box is stretched.
+ *
+ * The circle goes round once and then a little further, the way someone
+ * circling a number on paper does not stop exactly where they started.
+ * `pathLength="100"` normalises both paths so one dash rule traces either.
  */
 const PATHS = {
   circle:
-    "M9 24C4 12 28 3 56 3c26 0 41 7 40 18-1 12-22 17-48 17C24 38 5 34 4 23c-1-9 12-16 30-18",
-  underline: "M2 37c16-3 34-4 50-3 15 1 31 0 46-3",
+    "M93 9C85 3 62 0 41 3 17 6 2 13 4 22c2 9 24 17 50 17 25 0 43-7 42-16C95 14 77 7 56 6",
+  underline: "M2 36c16-3 34-4 50-3 15 1 31 0 46-3",
 } as const;
 
 export function Mark({
@@ -24,7 +28,7 @@ export function Mark({
     <span className="mark">
       {children}
       <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
-        <path d={PATHS[kind]} />
+        <path d={PATHS[kind]} pathLength={100} />
       </svg>
     </span>
   );
