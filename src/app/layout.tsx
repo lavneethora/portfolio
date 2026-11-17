@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import { Anchor } from "@/components/Anchor";
+import CrewFooter from "@/components/CrewFooter";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SITE_URL, site } from "@/lib/site";
 import "./globals.css";
@@ -98,6 +99,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 
         {children}
 
+        <CrewFooter
+          className="crew-footer"
+          wordmark="LAVNEET"
+          fontFamily="var(--font-archivo), 'Arial Black', Arial, sans-serif"
+          palette={{ background: "var(--paper)", ink: "var(--ink)", accent: "var(--red)" }}
+          crew={[
+            { kind: "yeti", letter: 0, seat: "front", offset: -0.62, name: "Bruno", says: "You made it to the bottom." },
+            { kind: "bird", letter: 1, seat: "top", offset: 0.02, name: "Pip", says: "Thanks for scrolling." },
+            { kind: "mushroom", letter: 2, seat: "front", offset: 0.16, scale: 0.95, name: "Morel", says: "I live here now." },
+            { kind: "kid", letter: 3, seat: "top", offset: -0.05, name: "Juno", says: "Best seat on the page." },
+            { kind: "ghost", letter: 5, seat: "behind", name: "Boo", says: "Boo." },
+            { kind: "cat", letter: 6, seat: "front", offset: 0.4, flip: true, name: "Patch", says: "The email is back up there." },
+          ]}
+          doodles={["star", "sparkle", "plane", "star", "spiral"]}
+          doodleCount={10}
+        />
       </body>
     </html>
   );
