@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "prs": "node scripts/fetch-prs.ts"
+    "prs": "node scripts/fetch-prs.mts"
   },
   "dependencies": {
     "next": "16.4.6",
