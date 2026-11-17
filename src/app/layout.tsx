@@ -86,10 +86,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
 
         <header className="site-header">
-          <p className="quiet m-0">Computer science at Texas Tech, graduating May 2027</p>
           <nav aria-label="Sections">
             <a href="#work">Work</a>
-            <a href="#open-source">Open source</a>
+            <a href="#open-source">Open Source</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
             <ThemeToggle />
@@ -98,13 +97,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 
         {children}
 
-        <footer className="site-footer">
-          <p>
-            Built with Next.js and no animation library. The orbit at the top runs on the
-            integrator from <a href="https://github.com/lavneethora/three-body">three-body</a>,
-            and its energy readout is computed live.
-          </p>
-        </footer>
       </body>
     </html>
   );
