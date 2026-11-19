@@ -4,7 +4,7 @@
  */
 
 /** The sentence under the "More Projects" heading. */
-export const moreIntro = "Smaller projects and hackathon builds.";
+export const moreIntro = "Some of my other projects.";
 
 /** The picture taped next to it: the repository list on my GitHub profile. */
 export const githubShot = {
