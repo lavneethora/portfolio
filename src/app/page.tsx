@@ -115,8 +115,8 @@ export default function Home() {
           </h2>
           <div className="section-body">
             <p className="section-lede">
-              Since September 2026 I&apos;ve been sending fixes to open-source AI tooling.{" "}
-              <Mark kind="underline">{totalMerged} pull requests</Mark> are merged so far. The
+              I started contributing to a few open-source AI repos in September 2026.
+              I&apos;ve merged <Mark kind="underline">{totalMerged} pull requests</Mark> so far. The
               list below comes straight from GitHub, last pulled on {fetchedAt}.
             </p>
 

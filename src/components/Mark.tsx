@@ -10,11 +10,15 @@ import type { ReactNode } from "react";
  * The circle goes round once and then a little further, the way someone
  * circling a number on paper does not stop exactly where they started.
  * `pathLength="100"` normalises both paths so one dash rule traces either.
+ *
+ * The underline sags slightly in the middle but stays flat end to end. An
+ * earlier one rose six units to the right, which lifted its tail into the
+ * descenders of the last few letters and read as a line stopping short.
  */
 const PATHS = {
   circle:
     "M93 9C85 3 62 0 41 3 17 6 2 13 4 22c2 9 24 17 50 17 25 0 43-7 42-16C95 14 77 7 56 6",
-  underline: "M2 36c16-3 34-4 50-3 15 1 31 0 46-3",
+  underline: "M2 36.8c16 .8 34 1.2 50 .6 15-.6 31-.2 46-1",
 } as const;
 
 export function Mark({
