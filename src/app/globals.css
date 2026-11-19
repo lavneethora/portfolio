@@ -778,33 +778,29 @@
   stroke-width: 2.4;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-  /* pathLength="100" (Mark.tsx) makes one dash cover any of these paths. */
-  stroke-dasharray: 100;
-  stroke-dashoffset: var(--draw, 0);
+  /*
+   * The dash has to be exactly as long as the stroke, and under
+   * non-scaling-stroke that length is in screen pixels, so Mark.tsx measures
+   * it and sets --pen-len. The fallback is longer than any mark on the page,
+   * so without JavaScript the dash still covers the whole stroke and --draw's
+   * initial 0 leaves the mark fully drawn.
+   */
+  stroke-dasharray: var(--pen-len, 999px);
+  stroke-dashoffset: calc(var(--draw, 0) / 100 * var(--pen-len, 999px));
 }
 
 /*
- * Where the browser supports it the pen draws itself as the mark scrolls up
- * the page, over enough distance to actually watch. Anywhere else the mark
- * is simply there, because --draw stays at 0.
+ * Mark.tsx wipes the stroke while the mark is still off screen, then lets it
+ * draw itself once as the mark arrives. Without JavaScript neither class is
+ * ever set and --draw keeps its initial 0, so the mark is simply there.
  */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .mark svg {
-      animation: pen linear both;
-      animation-timeline: view();
-      animation-range: entry 15% cover 45%;
-    }
-  }
+.mark.pending svg {
+  --draw: 100;
 }
 
-@keyframes pen {
-  from {
-    --draw: 100;
-  }
-  to {
-    --draw: 0;
-  }
+.mark.drawn svg {
+  --draw: 0;
+  transition: --draw 900ms cubic-bezier(0.33, 0.9, 0.5, 1);
 }
 
 /* ------------------------------------------------------------------ *
