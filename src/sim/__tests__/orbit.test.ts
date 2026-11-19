@@ -68,12 +68,29 @@ describe("flicking a body", () => {
     expect(sim.drift()).toBe(0);
   });
 
-  it("clamps the kick to the maximum flick speed", () => {
+  it("clamps the throw to the maximum flick speed", () => {
     const sim = new OrbitSim();
-    // Measured against another body, so the recentring does not matter.
-    const before = sim.state.vel[0] - sim.state.vel[3];
     sim.flick(0, 100, 0);
-    expect(sim.state.vel[0] - sim.state.vel[3] - before).toBeCloseTo(MAX_FLICK_SPEED, 12);
+    expect(Math.hypot(sim.state.vel[0], sim.state.vel[1])).toBeCloseTo(MAX_FLICK_SPEED, 12);
+  });
+
+  it("sends the body along the line it was thrown, whatever it was doing before", () => {
+    // The throw used to be added to the body's orbital velocity, which won
+    // the argument on short drags: a gentle throw could leave almost exactly
+    // backwards. A short one is the case worth pinning down.
+    const speed = 0.12 * MAX_FLICK_SPEED;
+    for (const body of [0, 1, 2]) {
+      for (const deg of [0, 45, 137, 212, 300]) {
+        const sim = new OrbitSim();
+        sim.advance(60, Infinity);
+        const a = (deg * Math.PI) / 180;
+        sim.flick(body, Math.cos(a) * speed, Math.sin(a) * speed);
+        const vx = sim.state.vel[body * 3];
+        const vy = sim.state.vel[body * 3 + 1];
+        expect(Math.atan2(vy, vx)).toBeCloseTo(a > Math.PI ? a - 2 * Math.PI : a, 12);
+        expect(Math.hypot(vx, vy)).toBeCloseTo(speed, 12);
+      }
+    }
   });
 
   it("leaves the system with no net momentum, so it stays on the page", () => {

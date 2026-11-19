@@ -25,7 +25,7 @@ const DT_MIN = 1e-5;
  */
 const ESCAPE_DISTANCE = 3;
 
-/** Largest kick a flick can give, as a multiple of the orbit's own speed scale. */
+/** Fastest a flick can throw a body, as a multiple of the orbit's own speed scale. */
 export const MAX_FLICK_SPEED = 3 * K_GAUSS;
 
 /**
@@ -96,34 +96,42 @@ export class OrbitSim {
   }
 
   /**
-   * Add a velocity kick to one body, in AU/day.
+   * Throw one body along a velocity, in AU/day, clamped to MAX_FLICK_SPEED.
    *
-   * A kick gives the whole system net momentum, which on screen would carry
-   * all three bodies off the page together. So the kick is followed by a
-   * shift back into the centre-of-mass frame: the thrown body goes one way
-   * and the other two recoil the other way, as seen from the system itself.
+   * The velocity is replaced, not added to. Adding left the throw competing
+   * with the body's own orbital motion, which is 0.64 to 1.27 times K_GAUSS
+   * and so comparable to the kick itself: a short drag came out as much as
+   * 177 degrees from where it was pointed, and even a full-length one was
+   * 11 to 23 degrees off. Replacing it means the body leaves along the line
+   * that was drawn, every time.
+   *
+   * A throw gives the system net momentum, which on screen would carry all
+   * three bodies off the page together. The bodies left behind absorb it,
+   * rather than the shift being spread over all three, because taking a
+   * share out of the thrown body would bend it off the drawn line again.
    *
    * The energy reference is re-measured afterwards, so the drift readout
    * reports integration error since the throw and not the throw itself.
    */
-  flick(body: number, dvx: number, dvy: number): void {
-    const speed = Math.hypot(dvx, dvy);
+  flick(body: number, vx: number, vy: number): void {
+    const speed = Math.hypot(vx, vy);
     const scale = speed > MAX_FLICK_SPEED ? MAX_FLICK_SPEED / speed : 1;
     const { n, mass, vel } = this.state;
-    vel[body * 3] += dvx * scale;
-    vel[body * 3 + 1] += dvy * scale;
+    const ux = vx * scale;
+    const uy = vy * scale;
 
-    let m = 0;
-    let px = 0;
-    let py = 0;
+    // Momentum the swap introduces, carried by everyone except the thrown body.
+    const dpx = mass[body] * (ux - vel[body * 3]);
+    const dpy = mass[body] * (uy - vel[body * 3 + 1]);
+    let rest = 0;
+    for (let i = 0; i < n; i++) if (i !== body) rest += mass[i];
+
+    vel[body * 3] = ux;
+    vel[body * 3 + 1] = uy;
     for (let i = 0; i < n; i++) {
-      m += mass[i];
-      px += mass[i] * vel[i * 3];
-      py += mass[i] * vel[i * 3 + 1];
-    }
-    for (let i = 0; i < n; i++) {
-      vel[i * 3] -= px / m;
-      vel[i * 3 + 1] -= py / m;
+      if (i === body) continue;
+      vel[i * 3] -= dpx / rest;
+      vel[i * 3 + 1] -= dpy / rest;
     }
 
     this.fixedStep = false;
