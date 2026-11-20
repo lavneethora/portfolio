@@ -31,6 +31,11 @@ interface RepoNote {
   did: string;
   /** Square logo in /public/logos, shown beside the name. */
   logo?: string;
+  /**
+   * A phrase inside `did` to pick out in red pen. It has to appear verbatim;
+   * if it does not, the line renders plain rather than losing anything.
+   */
+  mark?: string;
 }
 
 /**
@@ -45,7 +50,8 @@ const featured: RepoNote[] = [
     logo: "/logos/harvey.png",
     what: "Harvey's Legal Agent Benchmark",
     org: { text: "Harvey", href: "https://www.harvey.ai" },
-    did: "The grader was scoring unreadable files as if an agent had written them, and 7 models with no pricing metadata were crashing the dashboard and misreporting cost by 12x.",
+    mark: "top 4 of 27 contributors",
+    did: "I'm in their top 4 of 27 contributors, and most of what I fixed was the model registry. Seven models had no pricing metadata at all, which was crashing the dashboard and misreporting cost by 12x, and a few more had drifted out of date. I got Gemini 3.x runs working again by sending the temperature Google requires on both the agent and judge paths. I also stopped the grader scoring unreadable deliverables as if an agent had written them, so they come back as errors now instead of verdicts.",
   },
   {
     repo: "omnigent-ai/omnigent",
@@ -53,13 +59,15 @@ const featured: RepoNote[] = [
     logo: "/logos/databricks.png",
     what: "Databricks' Open-Source Agent Harness",
     org: { text: "Databricks", href: "https://www.databricks.com" },
-    did: "Patched a credential leak where repository URLs with embedded tokens were saved into session labels and pod specs.",
+    mark: "top 60 of 309 contributors",
+    did: "I'm in their top 60 of 309 contributors, and most of it was uploads. I added seven new formats for Claude Code and Codex, which took the limits to 50 MB a file and 200 MB a session, and fixed a composer that was refusing .tsv files the server already accepted, along with the one-directional parity test that let the two drift apart. I also closed a credential leak, where a repository URL with a token embedded in it was being saved into session labels and pod specs.",
   },
   {
     repo: "rajfirke/provena",
     name: "Provena",
     what: "Tamper-Evident Audit Trails for AI Agents",
-    did: "Mostly storage fixes, like pinning pooled Postgres connections to UTC so chain verification survives a non-UTC time zone.",
+    mark: "top 2 of 42 contributors",
+    did: "I'm in their top 2 of 42 contributors, and most of it was the hash chain. Pooled Postgres connections were inheriting the server's time zone, so timestamps read back shifted and verify_chain failed on chains that were perfectly intact. Buffered writes were worse, since every record is hashed before the flush, so after one interleaved write everything after it chained off a hash the table did not hold. I measured that at 10 repairs out of 10 and got it down to 1. I also fixed a retriever returning a list of documents, which was recording every one of them as having no provenance at all.",
   },
 ];
 

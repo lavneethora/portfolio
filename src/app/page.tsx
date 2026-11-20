@@ -28,18 +28,38 @@ function Logo({ src }: { src: string }) {
 }
 
 /**
- * What a repo is, with the company that owns it linked to its own site. The
- * name has to appear in the sentence verbatim, so the sentence stays a plain
- * string in src/content and nothing is lost if the two ever drift apart.
+ * Cut a sentence around one phrase so it can be linked or marked. The phrase
+ * has to appear verbatim, so the sentences stay plain strings in src/content
+ * and nothing is lost if the two ever drift apart.
  */
+function cutAround(text: string, part: string | undefined) {
+  const at = part ? text.indexOf(part) : -1;
+  if (!part || at < 0) return null;
+  return { before: text.slice(0, at), match: part, after: text.slice(at + part.length) };
+}
+
+/** What a repo is, with the company that owns it linked to its own site. */
 function RepoWhat({ group }: { group: RepoGroup }) {
-  const at = group.org ? group.what.indexOf(group.org.text) : -1;
-  if (!group.org || at < 0) return <>{group.what}</>;
+  const cut = cutAround(group.what, group.org?.text);
+  if (!cut || !group.org) return <>{group.what}</>;
   return (
     <>
-      {group.what.slice(0, at)}
-      <Anchor href={group.org.href}>{group.org.text}</Anchor>
-      {group.what.slice(at + group.org.text.length)}
+      {cut.before}
+      <Anchor href={group.org.href}>{cut.match}</Anchor>
+      {cut.after}
+    </>
+  );
+}
+
+/** What the fixes were, with one phrase picked out in red pen. */
+function RepoDid({ group }: { group: RepoGroup }) {
+  const cut = cutAround(group.did, group.mark);
+  if (!cut) return <>{group.did}</>;
+  return (
+    <>
+      {cut.before}
+      <Mark kind="underline">{cut.match}</Mark>
+      {cut.after}
     </>
   );
 }
@@ -170,7 +190,9 @@ export default function Home() {
                   <p className="quiet">
                     <RepoWhat group={group} />
                   </p>
-                  <p>{group.did}</p>
+                  <p>
+                    <RepoDid group={group} />
+                  </p>
                   <details className="prs">
                     <summary>Show the pull requests</summary>
                     <ol>
