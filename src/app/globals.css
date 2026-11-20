@@ -832,11 +832,28 @@
 }
 
 .row-head h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin: 0;
   font-size: 1.45rem;
   font-weight: 700;
   font-stretch: 78%;
   line-height: 1.15;
+}
+
+/*
+ * Several of these marks are solid squares, one of them near black, so each
+ * gets the same hairline the rest of the page uses. Without it the dark ones
+ * lose their edges against dark paper.
+ */
+.logo {
+  flex: none;
+  width: 1.55rem;
+  height: 1.55rem;
+  border: 1px solid var(--hairline);
+  border-radius: 5px;
+  object-fit: contain;
 }
 
 .row-head .aside {

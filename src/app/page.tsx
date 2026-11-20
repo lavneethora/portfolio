@@ -8,9 +8,41 @@ import { Taped } from "@/components/Taped";
 import { awards, bio, intro } from "@/content/about";
 import { roles } from "@/content/experience";
 import { githubShot, moreIntro } from "@/content/more";
-import { fetchedAt, otherOpen, repoGroups, totalMerged } from "@/content/opensource";
+import {
+  fetchedAt,
+  otherOpen,
+  repoGroups,
+  totalMerged,
+  type RepoGroup,
+} from "@/content/opensource";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/lib/site";
+
+/**
+ * The organisation's own mark, beside its name. Decorative: the name it
+ * belongs to is right next to it in text, so it is hidden from screen
+ * readers rather than read out twice.
+ */
+function Logo({ src }: { src: string }) {
+  return <Image className="logo" src={src} alt="" width={64} height={64} aria-hidden />;
+}
+
+/**
+ * What a repo is, with the company that owns it linked to its own site. The
+ * name has to appear in the sentence verbatim, so the sentence stays a plain
+ * string in src/content and nothing is lost if the two ever drift apart.
+ */
+function RepoWhat({ group }: { group: RepoGroup }) {
+  const at = group.org ? group.what.indexOf(group.org.text) : -1;
+  if (!group.org || at < 0) return <>{group.what}</>;
+  return (
+    <>
+      {group.what.slice(0, at)}
+      <Anchor href={group.org.href}>{group.org.text}</Anchor>
+      {group.what.slice(at + group.org.text.length)}
+    </>
+  );
+}
 
 function ProjectEntry({ project, first }: { project: Project; first: boolean }) {
   return (
@@ -125,6 +157,7 @@ export default function Home() {
                 <li key={group.repo}>
                   <div className="row-head">
                     <h3>
+                      {group.logo ? <Logo src={group.logo} /> : null}
                       <Anchor href={`https://github.com/${group.repo}`}>{group.name}</Anchor>
                     </h3>
                     <span className="aside">
@@ -134,7 +167,9 @@ export default function Home() {
                       {group.open > 0 ? <PrState state="open">{group.open} open</PrState> : null}
                     </span>
                   </div>
-                  <p className="quiet">{group.what}</p>
+                  <p className="quiet">
+                    <RepoWhat group={group} />
+                  </p>
                   <p>{group.did}</p>
                   <details className="prs">
                     <summary>Show the pull requests</summary>
@@ -185,7 +220,10 @@ export default function Home() {
               {roles.map((role) => (
                 <li key={role.org}>
                   <div className="row-head">
-                    <h3>{role.org}</h3>
+                    <h3>
+                      {role.logo ? <Logo src={role.logo} /> : null}
+                      {role.org}
+                    </h3>
                     <span className="aside">
                       {role.when}, {role.where}
                     </span>

@@ -6,11 +6,14 @@ export interface Role {
   when: string;
   where: string;
   did: string;
+  /** Square logo in /public/logos, shown beside the organisation. */
+  logo?: string;
 }
 
 export const roles: Role[] = [
   {
     org: "UTHealth Houston, BIG-TCR Program",
+    logo: "/logos/uthealth.png",
     title: "Software Engineering Intern, Research",
     when: "Jun to Aug 2026",
     where: "Houston, TX",
@@ -18,6 +21,7 @@ export const roles: Role[] = [
   },
   {
     org: "Texas Tech, Electrical and Computer Engineering",
+    logo: "/logos/texas-tech.png",
     title: "Undergraduate Research Assistant",
     when: "May to Oct 2025",
     where: "Lubbock, TX",
@@ -25,6 +29,7 @@ export const roles: Role[] = [
   },
   {
     org: "iMocha",
+    logo: "/logos/imocha.png",
     title: "Software Engineering Intern, GenAI",
     when: "Jul to Aug 2025",
     where: "Remote",
