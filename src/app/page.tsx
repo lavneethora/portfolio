@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Anchor } from "@/components/Anchor";
 import { CeremoniDiagram } from "@/components/CeremoniDiagram";
+import { FlipLink } from "@/components/FlipLink";
 import { Mark } from "@/components/Mark";
 import { Orbit } from "@/components/Orbit";
 import { PrState } from "@/components/PrState";
@@ -290,18 +291,18 @@ export default function Home() {
             Contact
           </h2>
           <div className="section-body">
-            <Anchor className="contact-email display" href={`mailto:${site.email}`}>
+            <FlipLink className="contact-email display" href={`mailto:${site.email}`}>
               {site.email}
-            </Anchor>
+            </FlipLink>
             <ul className="contact-links">
               <li>
-                <Anchor href={site.linkedin}>LinkedIn</Anchor>
+                <FlipLink href={site.linkedin}>LinkedIn</FlipLink>
               </li>
               <li>
-                <Anchor href={site.github}>GitHub</Anchor>
+                <FlipLink href={site.github}>GitHub</FlipLink>
               </li>
               <li>
-                <Anchor href={site.resume}>Resume</Anchor>
+                <FlipLink href={site.resume}>Resume</FlipLink>
               </li>
             </ul>
           </div>

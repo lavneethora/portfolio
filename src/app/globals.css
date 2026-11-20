@@ -971,6 +971,98 @@
   overflow-wrap: anywhere;
 }
 
+/*
+ * Letters that roll over on hover (FlipLink.tsx).
+ *
+ * The link keeps its own text, so the size of the link, its underline and
+ * the space it takes on the page are all exactly what they were. The moving
+ * copies are an overlay sitting on top of that text, in a box that clips
+ * them as they travel.
+ *
+ * The text itself is just made invisible rather than covered over, which
+ * keeps the page's own underline: it is drawn against that text, in the
+ * hairline colour rather than the text colour, so turning the ink off leaves
+ * the line exactly where it sits on every other link. Drawing a replacement
+ * line instead cannot match it at both sizes, because the offset that puts
+ * it right under the email puts it through the smaller links.
+ */
+.flip {
+  position: relative;
+}
+
+.flip-text {
+  color: transparent;
+}
+
+/*
+ * The overlay sits exactly on the link's own box, so the copies land on the
+ * real text whatever line-height the link has. What reaches past the box is
+ * only the clip region: a line of text is taller than the box it sits in, by
+ * 4px at the top and 3px at the bottom at the email's size, and clipping at
+ * the box flattened the @ and cut the tail off the g. clip-path takes
+ * negative insets, so the region can be grown without moving anything.
+ */
+.flip-anim {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(-0.16em 0 -0.14em);
+  user-select: none;
+}
+
+/*
+ * Where the copies sit. Nothing for the email, whose box is its line box, so
+ * the rows land on the text on their own. An inline link's box is only its
+ * glyphs though, and its line box starts half the leading higher, so the
+ * smaller links pass that distance in as --flip-row-top.
+ */
+.flip-row {
+  position: absolute;
+  top: var(--flip-row-top, 0);
+  right: 0;
+  left: 0;
+  display: flex;
+}
+
+.flip-row > span {
+  display: inline-block;
+  transition: translate 300ms ease-in-out;
+}
+
+.flip-under > span {
+  translate: 0 140%;
+}
+
+.flip:hover .flip-row:not(.flip-under) > span,
+.flip:focus-visible .flip-row:not(.flip-under) > span {
+  translate: 0 -140%;
+}
+
+.flip:hover .flip-under > span,
+.flip:focus-visible .flip-under > span {
+  translate: 0 0;
+}
+
+/* The word still turns red, it just does not go anywhere. */
+@media (prefers-reduced-motion: reduce) {
+  .flip-row > span {
+    transition: none;
+  }
+
+  .flip:hover .flip-row:not(.flip-under) > span,
+  .flip:focus-visible .flip-row:not(.flip-under) > span {
+    translate: 0 0;
+  }
+
+  .flip:hover .flip-under > span,
+  .flip:focus-visible .flip-under > span {
+    translate: 0 140%;
+  }
+}
+
+.contact-links .flip {
+  --flip-row-top: -0.206em;
+}
+
 .contact-links {
   display: flex;
   flex-wrap: wrap;
